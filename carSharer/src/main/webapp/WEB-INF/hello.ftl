@@ -49,7 +49,7 @@
             Hallo, bitte tragen Sie Ihr Username ein!
         </p>
 
-        <form name="enterUsername" action="" method="post">
+        <form name="enterUsername" action="" method="get">
             <input type="text" class="enterUsernameForm" >
             <input  type="submit" value="value">
         </form>
