@@ -4,7 +4,10 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.utils.DBUtil;
@@ -39,6 +42,27 @@ public final class UserStore implements Closeable {
         catch (SQLException e) {
             throw new StoreException(e);
         }
+    }
+
+    public List<User> getAllUsers(){
+        List<User> userList= new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select * from benutzer");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                User u= new User();
+                u.setFirstName(resultSet.getString("name"));
+                u.setLastName(resultSet.getString("email"));
+                userList.add(u);
+            }
+
+        }
+        catch (SQLException e) {
+            throw new StoreException(e);
+        }
+        return userList;
     }
 
 

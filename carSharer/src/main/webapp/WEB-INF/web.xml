@@ -68,6 +68,20 @@
 		<url-pattern>/carSharer</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>testing_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.testingServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>testing_servlet</servlet-name>
+		<url-pattern>/testing_servlet</url-pattern>
+	</servlet-mapping>
+
+
+
+
+
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 
 		RequestDispatcher.forward/include should and will still work. Removing this 
 		may open security holes! -->
