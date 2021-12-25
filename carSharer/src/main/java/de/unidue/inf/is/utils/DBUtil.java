@@ -39,10 +39,16 @@ public final class DBUtil {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        String user = properties.getProperty("gruppenname");
+        String pass = properties.getProperty("passwort");
+        String rechnername = properties.getProperty("rechnername");
         String database = properties.getProperty("database");
-        final String url = "jdbc:db2:" + database;
-        return DriverManager.getConnection(url);
+
+        String gruppennummer = user.split("(?<=\\D)(?=\\d)")[1];
+
+        final String url = "jdbc:db2://" + rechnername + ".is.inf.uni-due.de:50" + gruppennummer + "/" + database + ":currentSchema=" + user + ";";
+        Connection connection = DriverManager.getConnection(url, user, pass);
+        return connection;
     }
 
 

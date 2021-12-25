@@ -34,7 +34,7 @@ public final class UserStore implements Closeable {
     public void addUser(User userToAdd) throws StoreException {
         try {
             PreparedStatement preparedStatement = connection
-                            .prepareStatement("insert into user (firstname, lastname) values (?, ?)");
+                            .prepareStatement("insert into dbp097.benutzer (name, email) values (?, ?)");
             preparedStatement.setString(1, userToAdd.getFirstName());
             preparedStatement.setString(2, userToAdd.getLastName());
             preparedStatement.executeUpdate();
@@ -48,7 +48,8 @@ public final class UserStore implements Closeable {
         List<User> userList= new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from benutzer");
+                    .prepareStatement("select * from dbp097.benutzer");
+            System.out.println("hello there 2!!");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()){

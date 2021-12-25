@@ -12,14 +12,24 @@ import java.util.List;
 
 public class testingServlet extends HttpServlet {
 
-    private static UserStore srv= new UserStore();
+
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        super.doGet(req, resp);
-        System.out.println("Hello there!");
-        List<User> userList= srv.getAllUsers();
-        userList.stream().forEach(System.out::println);
+        try(UserStore srv= new UserStore()) {
+            System.out.println("Hello there!!");
+
+            User userToAdd= new User();
+            userToAdd.setFirstName("ebrahim");
+            userToAdd.setLastName("ebrahim@uni-due.de");
+            srv.addUser(userToAdd);
+
+            //now print all the users
+            List<User> userList = srv.getAllUsers();
+            userList.stream().forEach(System.out::println);
+
+        }
     }
 }
