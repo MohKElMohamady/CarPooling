@@ -13,13 +13,30 @@ public class Fahrt {
     private int fahrtId;
     private String startOrt;
     private String zielOrt;
-    private Timestamp fahrtDatumZeit;
+    private String time;
+    private String date;
     private String status;
     private int transportMittelId;
     private int anbieter;
     //adding an additional attribute to the fahrt since it needs the transport icon a lot!
     private String iconPath;
 
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String removePfadKeyword(String path){
         path= path.replace("pfad", "");
@@ -86,14 +103,6 @@ public class Fahrt {
         this.zielOrt = zielOrt;
     }
 
-    public Timestamp getFahrtDatumZeit() {
-        return fahrtDatumZeit;
-    }
-
-    public void setFahrtDatumZeit(Timestamp fahrtDatumZeit) {
-        this.fahrtDatumZeit = fahrtDatumZeit;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -123,7 +132,7 @@ public class Fahrt {
     public String toString() {
         return "Fahrt{" +
                 "maxPlaetze=" + maxPlaetze +
-                ", fahrtKosten=" + fahrtKosten +
+                ", fahrtId=" + fahrtId +
                 ", startOrt='" + startOrt + '\'' +
                 ", zielOrt='" + zielOrt + '\'' +
                 '}';
