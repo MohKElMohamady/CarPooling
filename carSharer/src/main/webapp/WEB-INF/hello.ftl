@@ -46,12 +46,12 @@
 
     <div id="site">
         <p>
-            Hallo, bitte tragen Sie Ihr Username ein!
+            Hallo, bitte tragen Sie Ihr email ein!
         </p>
 
-        <form name="enterUsername" action="" method="get">
-            <input type="text" class="enterUsernameForm" >
-            <input  type="submit" value="value">
+        <form name="enterUsername" action="/view_main_servlet" method="post">
+            <input type="text" class="enterUsernameForm" name="email" >
+            <input  type="submit" value="submit">
         </form>
 
     </div>

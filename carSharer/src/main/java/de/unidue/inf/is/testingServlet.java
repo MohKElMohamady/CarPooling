@@ -22,8 +22,8 @@ public class testingServlet extends HttpServlet {
             System.out.println("Hello there!!");
 
             User userToAdd= new User();
-            userToAdd.setFirstName("ebrahim");
-            userToAdd.setLastName("ebrahim@uni-due.de");
+            userToAdd.setName("ebrahim");
+            userToAdd.setEmail("ebrahim@uni-due.de");
             srv.addUser(userToAdd);
 
             //now print all the users

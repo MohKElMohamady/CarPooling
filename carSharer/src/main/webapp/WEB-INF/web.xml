@@ -78,6 +78,17 @@
 		<url-pattern>/testing_servlet</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>view_main_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewMainServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>view_main_servlet</servlet-name>
+		<url-pattern>/view_main_servlet</url-pattern>
+	</servlet-mapping>
+
+
 
 
 
