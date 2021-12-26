@@ -69,6 +69,7 @@
         <h3>
             Offene Fahrten:
         </h3>
+        <br/><br/><br/>
         <form method="post" name="view_main_form" action="/hello_servlet">
             <div>
                 <#list openTrips as otrip>
@@ -83,7 +84,12 @@
                 </#list>
             </div>
         </form>
+        <br/><br/><br/>
+        <form method="get" name="view_main_form" action="/hello_servlet">
+            <input type="submit" value="Fahrt">
+        </form>
     </div>
+
 
 
 </div>
