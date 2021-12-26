@@ -88,6 +88,15 @@
 		<url-pattern>/view_main_servlet</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>fahrt_details_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.FahrtDetailsServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>fahrt_details_servlet</servlet-name>
+		<url-pattern>/fahrt_details_servlet</url-pattern>
+	</servlet-mapping>
 
 
 
