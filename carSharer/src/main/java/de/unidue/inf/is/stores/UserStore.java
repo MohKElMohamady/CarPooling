@@ -18,6 +18,8 @@ import de.unidue.inf.is.utils.DBUtil;
 
 public final class UserStore implements Closeable {
 
+    //purpose of this class:
+//contains queri3es relating to the table Benutzer
 
     private Connection connection;
     private boolean complete;
@@ -48,6 +50,7 @@ public final class UserStore implements Closeable {
             int ID = 0;
             while (resultSet.next()) {
                 ID = resultSet.getInt("bid");
+                System.out.println("#########################################################");
             }
 
             System.out.println("the id of the fetcched user: "+ ID);
@@ -66,6 +69,8 @@ public final class UserStore implements Closeable {
             }
 
             reservierenList.stream().forEach(System.out::println);
+            System.out.println("#########################################################");
+
 
 
             //Now get the particular trip.
@@ -87,6 +92,9 @@ public final class UserStore implements Closeable {
             }
 
             fahrtList.stream().forEach(System.out::println);
+            System.out.println("#########################################################");
+
+
 
         }
         catch(SQLException e)
@@ -95,6 +103,18 @@ public final class UserStore implements Closeable {
         }
         return fahrtList;
 
+    }
+
+    public String getNameUser(String email) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select name from dbp097.benutzer where email = ?");
+        preparedStatement.setString(1, email);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        String nameUser = null;
+        while (resultSet.next()) {
+            nameUser=resultSet.getString("name");
+        }
+        return nameUser;
+        
     }
 
 
@@ -118,7 +138,6 @@ public final class UserStore implements Closeable {
         try {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("select * from dbp097.benutzer");
-            System.out.println("hello there 2!!");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()){

@@ -9,7 +9,7 @@ public class Fahrt {
 
     private int maxPlaetze;
     private String beschreibung;
-    private int fahrtKosten;
+    private double fahrtKosten;
     private int fahrtId;
     private String startOrt;
     private String zielOrt;
@@ -34,11 +34,11 @@ public class Fahrt {
         this.beschreibung = beschreibung;
     }
 
-    public int getFahrtKosten() {
+    public double getFahrtKosten() {
         return fahrtKosten;
     }
 
-    public void setFahrtKosten(int fahrtKosten) {
+    public void setFahrtKosten(double fahrtKosten) {
         this.fahrtKosten = fahrtKosten;
     }
 
@@ -102,10 +102,10 @@ public class Fahrt {
     @Override
     public String toString() {
         return "Fahrt{" +
-                "startOrt='" + startOrt + '\'' +
+                "maxPlaetze=" + maxPlaetze +
+                ", fahrtKosten=" + fahrtKosten +
+                ", startOrt='" + startOrt + '\'' +
                 ", zielOrt='" + zielOrt + '\'' +
-                ", status='" + status + '\'' +
                 '}';
     }
-
 }

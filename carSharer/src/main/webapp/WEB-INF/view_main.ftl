@@ -46,16 +46,36 @@
 
     <div id="site">
         <h1>
-            Car Sharer
+            Car Sharer <br>
+           <h2>Hello ${nameUser}</h2>
         </h1>
         <h3>
             Meine reservierten Fahrten:
         </h3>
-        <form method="get" name="view_main_form" action="/hello_servlet">
+        <form method="post" name="view_main_form" action="/hello_servlet">
             <div>
-                <#list trips as trip>
+                <#list reservedTrips as rtrip>
                     <div>
-                        Start= ${trip.startort}
+                        Start= ${rtrip.getStartOrt()}<br/>
+                        Nach= ${rtrip.getZielOrt()}<br/>
+                        Status= ${rtrip.getStatus()}<br/>
+                    </div>
+                    <input type="submit" value="view">
+                </#list>
+            </div>
+        </form>
+
+        <h3>
+            Offene Fahrten:
+        </h3>
+        <form method="post" name="view_main_form" action="/hello_servlet">
+            <div>
+                <#list openTrips as otrip>
+                    <div>
+                        Start= ${otrip.getStartOrt()}<br/>
+                        Nach= ${otrip.getZielOrt()}<br/>
+                        Freie Plätze= ${otrip.getMaxPlaetze()}<br/>
+                        Fahrkosten= ${otrip.getFahrtKosten()}<br/>
                     </div>
                     <input type="submit" value="view">
                 </#list>
