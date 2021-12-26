@@ -47,32 +47,34 @@
     <div id="site">
         <h1>
             Car Sharer <br>
-           <h2>Hello ${nameUser}</h2>
+            <h2>Hello ${nameUser}</h2>
         </h1>
         <h3>
             Meine reservierten Fahrten:
         </h3>
-        <form method="post" name="view_main_form" action="/hello_servlet">
-            <div>
-                <#list reservedTrips as rtrip>
+
+        <div>
+            <#list reservedTrips as rtrip>
+                <form method="post" name="view_main_form" action="/fahrt_details_servlet?fid=${rtrip.getFahrtId()}">
                     <div>
-                        <img src=${rtrip.getIconPath()} alt="car_picture" class="icon"/><br/>
+                        <img src=${rtrip.getIconPath()} alt="picture" class="icon"/><br/>
                         Start= ${rtrip.getStartOrt()}<br/>
                         Nach= ${rtrip.getZielOrt()}<br/>
                         Status= ${rtrip.getStatus()}<br/>
                     </div>
                     <input type="submit" value="view">
-                </#list>
-            </div>
-        </form>
+                </form>
+            </#list>
+        </div>
+
 
         <h3>
             Offene Fahrten:
         </h3>
         <br/><br/><br/>
-        <form method="post" name="view_main_form" action="/hello_servlet">
-            <div>
-                <#list openTrips as otrip>
+        <div>
+            <#list openTrips as otrip>
+                <form method="post" name="view_main_form_second" action="/fahrt_details_servlet?fid=${otrip.getFahrtId()}">
                     <div>
                         <img src=${otrip.getIconPath()} alt="picture" class="icon"/><br/>
                         Start= ${otrip.getStartOrt()}<br/>
@@ -81,11 +83,12 @@
                         Fahrkosten= ${otrip.getFahrtKosten()}<br/>
                     </div>
                     <input type="submit" value="view">
-                </#list>
-            </div>
-        </form>
+                </form>
+            </#list>
+        </div>
+
         <br/><br/><br/>
-        <form method="get" name="view_main_form" action="/hello_servlet">
+        <form method="get" name="view_main_form_third" action="/">
             <input type="submit" value="Fahrt">
         </form>
     </div>
