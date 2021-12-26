@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import de.unidue.inf.is.utils.DateTimeUtil;
+
 //purpose of this class:
 //contains queri3es relating to the table Fahrt
 public class FahrtStore implements Closeable {
@@ -111,9 +113,11 @@ public class FahrtStore implements Closeable {
             while(resultSet.next()){
                 Fahrt f= new Fahrt();
                 f.setAnbieter(resultSet.getInt("anbieter"));
-                String time= resultSet.getString("fahrtdatumzeit");
-                //for now i Just want to check if the time comes as a string or no
-                System.out.println(time);
+                String DB2TimeStamp= resultSet.getString("fahrtdatumzeit");
+                String time= DateTimeUtil.extractTimeFromDB2DateTimeString(DB2TimeStamp);
+                String date= DateTimeUtil.extractDateFromDB2DateTimeString(DB2TimeStamp);
+                f.setTime(time);
+                f.setDate(date);
                 f.setStartOrt(resultSet.getString("startort"));
                 f.setZielOrt(resultSet.getString("zielort"));
                 //f.setMaxPlaetze(resultSet.getInt("freiplaetze"));

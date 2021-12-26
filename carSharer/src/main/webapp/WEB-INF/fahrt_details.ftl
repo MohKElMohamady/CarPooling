@@ -56,7 +56,7 @@
                     <div>
 
                         Anbieter: ${email} <br/>
-                        Fahrtdatum uhr -uhrzeit: <br/>
+                        Fahrtdatum uhr -uhrzeit: ${trip.getDate()}        ${trip.getTime()}  <br/>
                         Von= ${trip.getStartOrt()}<br/>
                         Nach= ${trip.getZielOrt()}<br/>
                         Anzahl freier Plätze:     <br/>
