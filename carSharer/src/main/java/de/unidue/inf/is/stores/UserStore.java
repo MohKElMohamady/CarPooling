@@ -37,7 +37,7 @@ public final class UserStore implements Closeable {
     public void getReservations(String email)  {
 
         List<Reservieren> reservierenList= new ArrayList<>();
-        List<Fahrt> FahrtList= new ArrayList<>();
+        List<Fahrt> fahrtList= new ArrayList<>();
 
         try {
 
@@ -71,19 +71,22 @@ public final class UserStore implements Closeable {
             //Now get the particular trip.
             for (Reservieren r: reservierenList) {
                 System.out.println(r);
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp097.fahrt WHERE dbp097.fahrt.fid = ?");
+                System.out.println(r.getFahrtId());
+                ps.setInt(1, r.getFahrtId());
+                ResultSet resultSet3 = ps.executeQuery();
 
-                PreparedStatement preparedStatement3 = connection.prepareStatement("select * from dbp097.fahrt where fid = ?");
-                preparedStatement3.setInt(1, r.getFahrtId());
-                ResultSet resultSet3 = preparedStatement3.executeQuery();
+                while(resultSet3.next()){
+                    Fahrt fahrt = new Fahrt();
+                    fahrt.setStartOrt(resultSet3.getString("startort"));
+                    fahrt.setZielOrt(resultSet3.getString("zielort"));
+                    fahrt.setStatus(resultSet3.getString("status"));
+                    fahrtList.add(fahrt);
+                }
 
-                Fahrt fahrt = new Fahrt();
-                fahrt.setStartOrt(resultSet3.getString("startort"));
-                fahrt.setZielOrt(resultSet3.getString("zielort"));
-                fahrt.setStatus(resultSet3.getString("status"));
-                FahrtList.add(fahrt);
             }
 
-            FahrtList.stream().forEach(System.out::println);
+            fahrtList.stream().forEach(System.out::println);
 
         }
         catch(SQLException e)
