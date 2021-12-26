@@ -77,6 +77,7 @@ public class FahrtStore implements Closeable {
                 Fahrt f= new Fahrt();
                 f.setStartOrt(resultSet.getString("startort"));
                 f.setZielOrt(resultSet.getString("zielort"));
+                f.setFahrtId(resultSet.getInt("fid"));
 
                 //the below variable is actually storing the free places for each trip. Just reusing the MaxPlaetze Variable.
                 // Notice the columnLabel =)
@@ -93,6 +94,45 @@ public class FahrtStore implements Closeable {
         openTripsList.stream().forEach(System.out::println);
         System.out.println("#########################################################");
         return openTripsList;
+    }
+
+    //the below method will get all the information for a particular trip with the ID that gets passed to it!
+    public List<Fahrt> getAllInfoForTrip(int fid){
+        List<Fahrt> fahrtWithInfo= new ArrayList<>();
+        try {
+            //I can directly do this since i have made a new view called "anzfreiplaetze"
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select * from dbp097.fahrt where dbp097.fahrt.fid= ?");
+
+            preparedStatement.setInt(1, fid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while(resultSet.next()){
+                Fahrt f= new Fahrt();
+                f.setAnbieter(resultSet.getInt("anbieter"));
+                String time= resultSet.getString("fahrtdatumzeit");
+                //for now i Just want to check if the time comes as a string or no
+                System.out.println(time);
+                f.setStartOrt(resultSet.getString("startort"));
+                f.setZielOrt(resultSet.getString("zielort"));
+                //f.setMaxPlaetze(resultSet.getInt("freiplaetze"));
+                f.setFahrtKosten(resultSet.getDouble("fahrtkosten"));
+                f.setStatus(resultSet.getString("status"));
+                f.setBeschreibung(resultSet.getString("beschreibung"));
+                f.setFahrtId(resultSet.getInt("fid"));
+//              String path= f.removePfadKeyword(resultSet.getString("icon"));
+//                f.setIconPath(path);
+
+                fahrtWithInfo.add(f);
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return fahrtWithInfo;
+
     }
 
 
