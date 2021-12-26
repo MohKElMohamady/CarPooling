@@ -55,7 +55,7 @@
                 <form method="post" name="view_main_form" action="/fahrt_details_servlet?fid=${trip.getFahrtId()}">
                     <div>
 
-                        Anbieter: <br/>
+                        Anbieter: ${email} <br/>
                         Fahrtdatum uhr -uhrzeit: <br/>
                         Von= ${trip.getStartOrt()}<br/>
                         Nach= ${trip.getZielOrt()}<br/>

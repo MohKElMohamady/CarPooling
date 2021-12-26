@@ -141,6 +141,24 @@ public class FahrtStore implements Closeable {
 
     }
 
+    public User getAnbieter(int fid)  {
+        //till now this method is jsut populating the email. when needed change the query and populate with more fields
+        User anbieter= new User();
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("select email from dbp097.benutzer where bid= ? ");
+            preparedStatement.setInt(1, fid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                anbieter.setEmail(resultSet.getString("email"));
+            }
+        }
+        catch(SQLException e){
+        }
+        return anbieter;
+
+    }
+
 
 }
 

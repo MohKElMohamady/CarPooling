@@ -1,6 +1,7 @@
 package de.unidue.inf.is;
 
 import de.unidue.inf.is.domain.Fahrt;
+import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.stores.FahrtStore;
 
 import javax.servlet.ServletException;
@@ -19,7 +20,14 @@ public class FahrtDetailsServlet extends HttpServlet {
         int fahrtId= Integer.parseInt(req.getParameter("fid"));
         try(FahrtStore fahrtStore = new FahrtStore()){
             List<Fahrt> trip= fahrtStore.getAllInfoForTrip(fahrtId);
+            User anbieter= fahrtStore.getAnbieter(fahrtId);
+
+
+
+
+
             req.setAttribute("trip", trip);
+            req.setAttribute("email", anbieter.getEmail());
             req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
 
         }
