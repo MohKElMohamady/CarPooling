@@ -52,7 +52,7 @@
 
         <div>
             <#list trip as trip>
-                <form method="post" name="view_main_form" action="/fahrt_details_servlet?fid=${rtrip.getFahrtId()}">
+                <form method="post" name="view_main_form" action="/fahrt_details_servlet?fid=${trip.getFahrtId()}">
                     <div>
 
                         Anbieter: <br/>
@@ -61,7 +61,11 @@
                         Nach= ${trip.getZielOrt()}<br/>
                         Anzahl freier Plätze:     <br/>
                         Status= ${trip.getStatus()}<br/>
-                        Beschreibung= ${trip.getBeschreibung()}<br/>
+                        <#if trip.getBeschreibung()??>
+                            Beschreibung= ${trip.getBeschreibung()}<br/>
+                        </#if>
+
+
                     </div>
                     <input type="submit" value="view">
                 </form>

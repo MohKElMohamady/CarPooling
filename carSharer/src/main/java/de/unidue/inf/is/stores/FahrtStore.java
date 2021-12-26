@@ -119,7 +119,13 @@ public class FahrtStore implements Closeable {
                 //f.setMaxPlaetze(resultSet.getInt("freiplaetze"));
                 f.setFahrtKosten(resultSet.getDouble("fahrtkosten"));
                 f.setStatus(resultSet.getString("status"));
-                f.setBeschreibung(resultSet.getString("beschreibung"));
+                String beschreibung = resultSet.getString("beschreibung");
+                if(beschreibung!= null){
+                    f.setBeschreibung(resultSet.getString("beschreibung"));
+                }
+                else{
+                    f.setBeschreibung(null);
+                }
                 f.setFahrtId(resultSet.getInt("fid"));
 //              String path= f.removePfadKeyword(resultSet.getString("icon"));
 //                f.setIconPath(path);
