@@ -56,6 +56,7 @@
             <div>
                 <#list reservedTrips as rtrip>
                     <div>
+                        <img src=${rtrip.getIconPath()} alt="car_picture" class="icon"/><br/>
                         Start= ${rtrip.getStartOrt()}<br/>
                         Nach= ${rtrip.getZielOrt()}<br/>
                         Status= ${rtrip.getStatus()}<br/>
@@ -72,6 +73,7 @@
             <div>
                 <#list openTrips as otrip>
                     <div>
+                        <img src=${otrip.getIconPath()} alt="picture" class="icon"/><br/>
                         Start= ${otrip.getStartOrt()}<br/>
                         Nach= ${otrip.getZielOrt()}<br/>
                         Freie Plätze= ${otrip.getMaxPlaetze()}<br/>

@@ -17,6 +17,26 @@ public class Fahrt {
     private String status;
     private int transportMittelId;
     private int anbieter;
+    //adding an additional attribute to the fahrt since it needs the transport icon a lot!
+    private String iconPath;
+
+
+    public String removePfadKeyword(String path){
+        path= path.replace("pfad", "");
+        System.out.println("#########################################################");
+        System.out.println(path);
+        System.out.println("#########################################################");
+        return path;
+    }
+
+
+    public String getIconPath() {
+        return iconPath;
+    }
+
+    public void setIconPath(String iconPath) {
+        this.iconPath = iconPath;
+    }
 
     public int getMaxPlaetze() {
         return maxPlaetze;

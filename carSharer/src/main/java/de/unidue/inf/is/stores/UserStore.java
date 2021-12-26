@@ -76,7 +76,8 @@ public final class UserStore implements Closeable {
             //Now get the particular trip.
             for (Reservieren r: reservierenList) {
                 System.out.println(r);
-                PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp097.fahrt WHERE dbp097.fahrt.fid = ?");
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel=dbp097.transportmittel.tid" +
+                        " WHERE dbp097.fahrt.fid = ?");
                 System.out.println(r.getFahrtId());
                 ps.setInt(1, r.getFahrtId());
                 ResultSet resultSet3 = ps.executeQuery();
@@ -86,6 +87,9 @@ public final class UserStore implements Closeable {
                     fahrt.setStartOrt(resultSet3.getString("startort"));
                     fahrt.setZielOrt(resultSet3.getString("zielort"));
                     fahrt.setStatus(resultSet3.getString("status"));
+                    fahrt.setStatus(resultSet3.getString("status"));
+                    String path= fahrt.removePfadKeyword(resultSet3.getString("icon"));
+                    fahrt.setIconPath(path);
                     fahrtList.add(fahrt);
                 }
 

@@ -67,9 +67,9 @@ public class FahrtStore implements Closeable {
         try {
             //I can directly do this since i have made a new view called "anzfreiplaetze"
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select startort, zielort, fahrtkosten, dbp097.fahrt.fid, freiplaetze " +
-                            "from dbp097.anzfreiplaetze JOIN dbp097.fahrt " +
-                            "ON dbp097.fahrt.fid= dbp097.anzfreiplaetze.fid ");
+                    .prepareStatement("select startort, zielort, fahrtkosten, dbp097.fahrt.fid, freiplaetze, icon " +
+                            "from dbp097.anzfreiplaetze JOIN dbp097.fahrt ON dbp097.fahrt.fid= dbp097.anzfreiplaetze.fid " +
+                            "JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel= dbp097.transportmittel.tid");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -82,6 +82,8 @@ public class FahrtStore implements Closeable {
                 // Notice the columnLabel =)
                 f.setMaxPlaetze(resultSet.getInt("freiPlaetze"));
                 f.setFahrtKosten(resultSet.getDouble("fahrtkosten"));
+                String path= f.removePfadKeyword(resultSet.getString("icon"));
+                f.setIconPath(path);
                 openTripsList.add(f);
             }
         }
@@ -91,6 +93,8 @@ public class FahrtStore implements Closeable {
         openTripsList.stream().forEach(System.out::println);
         System.out.println("#########################################################");
         return openTripsList;
+    }
 
-    }}
+
+}
 
