@@ -34,7 +34,7 @@ public final class UserStore implements Closeable {
     }
 
 
-    public void getReservations(String email)  {
+    public List<Fahrt> getTrips(String email)  {
 
         List<Reservieren> reservierenList= new ArrayList<>();
         List<Fahrt> fahrtList= new ArrayList<>();
@@ -93,8 +93,7 @@ public final class UserStore implements Closeable {
         {
 
         }
-
-
+        return fahrtList;
 
     }
 
