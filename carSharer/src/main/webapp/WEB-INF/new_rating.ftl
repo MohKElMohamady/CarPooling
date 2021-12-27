@@ -50,7 +50,7 @@
             Please enter your ratings!
         </p>
 
-        <form name="enterRating" action="/view_main_servlet" method="post">
+        <form name="enterRating" action="new_rating" method="post">
             <label for="bewertungsTextId">Bewertungstext:</label>
             <br>
             <textarea id="bewertungsTextId" class="bewertungsTextClass" name="bewertungsText" cols="10" rows="20">
@@ -64,9 +64,7 @@
                     Bewertungsrating
                 </p>
 
-                <!-- Ratings can be either from 0 to 5 and will be captured from a radio button  -->
-                <label for="bewertungsValueId">0</label>
-                <input id="bewertungValueId" name="bewertungAddedByUser" type="radio" id="rating" value="0" >
+                <!-- Ratings can be either from 1 to 5 and will be captured from a radio button  -->
 
                 <label for="bewertungsValueId">1</label>
                 <input id="bewertungValueId" name="bewertungAddedByUser" type="radio" id="rating" value="1" >
