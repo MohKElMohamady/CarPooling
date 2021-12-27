@@ -22,6 +22,27 @@ public class Fahrt {
     private String iconPath;
 
 
+    public Fahrt(double fahrtKosten, String startOrt, String zielOrt, String iconPath) {
+        this.fahrtKosten = fahrtKosten;
+        this.startOrt = startOrt;
+        this.zielOrt = zielOrt;
+        this.iconPath = iconPath;
+    }
+
+
+    public Fahrt() {
+    }
+
+    public Fahrt(Builder builder){
+        this.startOrt = builder.startOrt;
+        this.zielOrt = builder.zielOrt;
+        this.fahrtKosten = builder.fahrtKosten;
+        this.status = builder.status;
+        this.beschreibung = builder.beschreibung;
+
+    }
+
+
     public String getTime() {
         return time;
     }
@@ -125,6 +146,70 @@ public class Fahrt {
 
     public void setAnbieter(int anbieter) {
         this.anbieter = anbieter;
+    }
+
+
+    public static class Builder{
+
+        private int maxPlaetze;
+        private double fahrtKosten;
+        private String startOrt;
+        private String zielOrt;
+        private String time;
+        private String beschreibung;
+        private String status;
+        private String pfad;
+
+        public Builder(){
+
+        }
+
+        public Builder startOrt(String val){
+            startOrt = val;
+            return this;
+        }
+
+
+        public Builder zielOrt(String val){
+            zielOrt = val;
+            return this;
+        }
+
+
+        public Builder time(String val){
+            time = val;
+            return this;
+        }
+
+        public Builder fahrtKosten(double val){
+            fahrtKosten = val;
+            return this;
+        }
+
+        public Builder beschreibung(String val){
+            beschreibung = val;
+            return this;
+        }
+
+        public Builder maxPlaetze(int val){
+            maxPlaetze = val;
+            return this;
+        }
+
+        public Builder status(String val){
+            status = val;
+            return this;
+        }
+
+        public Builder pfad(String val){
+            pfad = val;
+            return this;
+        }
+
+        public Fahrt build(){
+            return new Fahrt(this);
+        }
+
     }
 
 

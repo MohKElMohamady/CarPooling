@@ -6,10 +6,7 @@ import de.unidue.inf.is.utils.DBUtil;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import de.unidue.inf.is.utils.DateTimeUtil;
@@ -161,6 +158,73 @@ public class FahrtStore implements Closeable {
         }
         return anbieter;
 
+    }
+
+    /*
+     * This is the section where the clean code written by Mohamed starts ;)
+     * This code is responsible for te retrieve search results from the view_search
+     */
+
+    public List<Fahrt> getFahrtFromSearch(String start, String ziel, String timestamp){
+
+        // To be implemented
+
+        List<Fahrt> fahrteSearchResult = new ArrayList<>();
+
+        /*
+         * Queries to be pasted inside the DB2 Shell:
+         * To retrieve all fahrts and their dates for debugging
+         * select startort, zielort, fahrtkosten, fahrtdatumzeit from dbp097.fahrt
+         *
+         * The query inside the prepared statement
+         * SELECT startort, zielort, fahrtkosten FROM dbp097.fahrt WHERE startort = 'Duisburg' AND zielort = 'Hamburg' AND fahrtdatumzeit >= '2021-12-27-00.00.00.000000' AND status = 'offen'
+         */
+
+        try {
+            PreparedStatement preparedStatementForSearchResult = connection.
+                    prepareStatement("SELECT startort, zielort, fahrtkosten " +
+                            "FROM dbp097.fahrt " +
+                            "WHERE startort = ? AND zielort =? AND fahrtdatumzeit >= ? AND status = 'offen'");
+
+            preparedStatementForSearchResult.setString(1, start);
+
+            preparedStatementForSearchResult.setString(2,ziel);
+
+            preparedStatementForSearchResult.setString(3, timestamp);
+
+            ResultSet resultSetFoundFahrten = preparedStatementForSearchResult.executeQuery();
+
+            /*if (!resultSetFoundFahrten.next() ) {
+                System.out.println("no data");
+            }*/
+
+            while(resultSetFoundFahrten.next()){
+
+
+
+                System.out.println(resultSetFoundFahrten.getString("startort"));
+                System.out.println(resultSetFoundFahrten.getString("zielort"));
+                System.out.println(resultSetFoundFahrten.getInt("fahrtkosten"));
+
+                Fahrt fahrt = new Fahrt.Builder()
+                        .startOrt(resultSetFoundFahrten.getString("startort"))
+                        .zielOrt(resultSetFoundFahrten.getString("zielort"))
+                        .fahrtKosten(resultSetFoundFahrten.getInt("fahrtkosten"))
+                        .build();
+
+                System.out.println(fahrt);
+
+                fahrteSearchResult.add(fahrt);
+
+
+            }
+
+        }catch (SQLException e){
+            throw new StoreException(e);
+        }
+
+
+        return  fahrteSearchResult;
     }
 
 
