@@ -64,12 +64,30 @@
                         <#if trip.getBeschreibung()??>
                             Beschreibung= ${trip.getBeschreibung()}<br/>
                         </#if>
-
-
                     </div>
                     <input type="submit" value="view">
                 </form>
             </#list>
+            <br/>
+            <br/>
+            <br/>
+            <hr/>
+            <div>
+                <h3>
+                    Aktionsleiste
+                </h3>
+                <#list trip as trip>
+                <form method="post" action="/reserve_servlet?fid=${trip.getFahrtId()}">
+                    Anzahl Plaetze fuer Reservierung: <input type="number" value="Anz" name="anzahlPlaetze" />
+                    <input type="submit" value="Fahr reservieren" name="reserve button" />
+                </form>
+                </#list>
+                <form>
+                    <input type="submit" value="Fahr löschen" name="delete button" />
+                </form>
+
+            </div>
+
         </div>
 
         </p>
