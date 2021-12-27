@@ -11,6 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import de.unidue.inf.is.utils.DateTimeUtil;
 
+
+/*
+ * To Do:
+ *
+ */
+
 //purpose of this class:
 //contains queri3es relating to the table Fahrt
 public class FahrtStore implements Closeable {

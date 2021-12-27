@@ -15,6 +15,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/*
+ * To Do:
+ *
+ */
 public class ViewSearchServlet extends HttpServlet {
 
     FahrtStore fahrtStore = new FahrtStore();

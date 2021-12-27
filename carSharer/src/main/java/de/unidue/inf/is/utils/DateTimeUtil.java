@@ -3,6 +3,11 @@ package de.unidue.inf.is.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+/*
+ * To Do:
+ *
+ */
+
 
 public class DateTimeUtil {
     static String DB2_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSSSSS";

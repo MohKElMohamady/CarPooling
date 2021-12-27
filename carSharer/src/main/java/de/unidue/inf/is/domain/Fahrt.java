@@ -5,6 +5,11 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
+/*
+ * To Do:
+ *
+ */
+
 public class Fahrt {
 
     private int maxPlaetze;
