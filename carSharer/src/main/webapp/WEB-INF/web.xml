@@ -68,7 +68,7 @@
 		<url-pattern>/carSharer</url-pattern>
 	</servlet-mapping>
 
-	<servlet>
+<!--	<servlet>
 		<servlet-name>testing_servlet</servlet-name>
 		<servlet-class>de.unidue.inf.is.testingServlet</servlet-class>
 	</servlet>
@@ -76,7 +76,7 @@
 	<servlet-mapping>
 		<servlet-name>testing_servlet</servlet-name>
 		<url-pattern>/testing_servlet</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<servlet>
 		<servlet-name>view_main_servlet</servlet-name>
@@ -109,7 +109,38 @@
 	</servlet-mapping>
 
 
+	<servlet>
+		<servlet-name>new_rating_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.NewRatingServlet</servlet-class>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>new_rating_servlet</servlet-name>
+		<url-pattern>new_rating</url-pattern>
+	</servlet-mapping>
+
+
+
+	<servlet>
+		<servlet-name>view_search_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewSearchServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>view_search_servlet</servlet-name>
+		<url-pattern>/view_search</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>view_drive_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.ViewDriveServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>view_drive_servlet</servlet-name>
+		<url-pattern>view_drive</url-pattern>
+	</servlet-mapping>
 
 
 

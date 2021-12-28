@@ -3,6 +3,11 @@ package de.unidue.inf.is.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+/*
+ * To Do:
+ *
+ */
+
 
 public class DateTimeUtil {
     static String DB2_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSSSSS";
@@ -55,6 +60,40 @@ public class DateTimeUtil {
             e.printStackTrace();
         }
         return datetimeStr;
+    }
+
+
+
+    public static String convertDateAndTimeToDB2DateTimeModified(String dateStr, String timeStr) {
+        String datetimeStr = null;
+        try {
+            Date parsedDate = new SimpleDateFormat("dd.MM.yyyy").parse(dateStr);
+            Date parsedTime = new SimpleDateFormat("HH:mm").parse(timeStr);
+            datetimeStr = new SimpleDateFormat("yyyy-MM-dd").format(parsedDate) + "-" + new SimpleDateFormat("HH.mm.ss.SSSSSS").format(parsedTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return datetimeStr;
+    }
+
+    /*
+     * Added method by Mohamed
+     */
+    public static String retrieveDateInDDMMYYYY(String date){
+
+        /* In this method we are converting a date from the format YYYYMMDD to DDMMYYYY by splitting it
+         * Once we splitted the String we will retrieve the first element of the array which is the year, then month
+         * and finally day.
+         *
+         */
+
+        String dateInDDMMYYYY = null;
+
+        String[] dateElements = date.split("-");
+
+        dateInDDMMYYYY = dateElements[2] + "." + dateElements[1] + "." +dateElements[0];
+
+        return dateInDDMMYYYY;
     }
 
     public static void main(String[] args) {

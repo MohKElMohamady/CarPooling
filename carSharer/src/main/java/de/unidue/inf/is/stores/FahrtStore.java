@@ -6,13 +6,16 @@ import de.unidue.inf.is.utils.DBUtil;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import de.unidue.inf.is.utils.DateTimeUtil;
+
+
+/*
+ * To Do:
+ *
+ */
 
 //purpose of this class:
 //contains queri3es relating to the table Fahrt
@@ -160,6 +163,150 @@ public class FahrtStore implements Closeable {
         catch(SQLException e){
         }
         return anbieter;
+
+    }
+
+    /*
+     * This is the section where the clean code written by Mohamed starts ;)
+     * This code is responsible for te retrieve search results from the view_search
+     */
+
+    public List<Fahrt> getFahrtFromSearch(String start, String ziel, String timestamp){
+
+        // To be implemented
+
+        List<Fahrt> fahrteSearchResult = new ArrayList<>();
+
+        /*
+         * Queries to be pasted inside the DB2 Shell:
+         * To retrieve all fahrts and their dates for debugging
+         * select startort, zielort, fahrtkosten, fahrtdatumzeit from dbp097.fahrt
+         *
+         * The query inside the prepared statement
+         * SELECT startort, zielort, fahrtkosten FROM dbp097.fahrt WHERE startort = 'Duisburg' AND zielort = 'Hamburg' AND fahrtdatumzeit >= '2021-12-27-00.00.00.000000' AND status = 'offen'
+         */
+
+        try {
+            PreparedStatement preparedStatementForSearchResult = connection.
+                    prepareStatement("SELECT startort, zielort, fahrtkosten " +
+                            "FROM dbp097.fahrt " +
+                            "WHERE startort = ? AND zielort =? AND fahrtdatumzeit >= ? AND status = 'offen'");
+
+            preparedStatementForSearchResult.setString(1, start);
+
+            preparedStatementForSearchResult.setString(2,ziel);
+
+            preparedStatementForSearchResult.setString(3, timestamp);
+
+            ResultSet resultSetFoundFahrten = preparedStatementForSearchResult.executeQuery();
+
+            /*if (!resultSetFoundFahrten.next() ) {
+                System.out.println("no data");
+            }*/
+
+            while(resultSetFoundFahrten.next()){
+
+
+
+                System.out.println(resultSetFoundFahrten.getString("startort"));
+                System.out.println(resultSetFoundFahrten.getString("zielort"));
+                System.out.println(resultSetFoundFahrten.getInt("fahrtkosten"));
+
+                Fahrt fahrt = new Fahrt.Builder()
+                        .startOrt(resultSetFoundFahrten.getString("startort"))
+                        .zielOrt(resultSetFoundFahrten.getString("zielort"))
+                        .fahrtKosten(resultSetFoundFahrten.getInt("fahrtkosten"))
+                        .build();
+
+                System.out.println(fahrt);
+
+                fahrteSearchResult.add(fahrt);
+
+
+            }
+
+        }catch (SQLException e){
+            throw new StoreException(e);
+        }
+
+
+        return  fahrteSearchResult;
+    }
+
+    /*
+     * Section for view drive
+     */
+
+    /*
+     * What needs to be achieved here?
+     * 1) retrieve objects of type Fahrt/Drive
+     * 2) Be able to reserve or delete the trips
+     * 3) Be able to create to see all the ratings for this specific drive.
+     */
+
+    /*
+     * This method should retrieve for us:
+     * 1) The information for the drive/trip from the first section of the page including the attributes:
+     *      Anbieter, Fahrt ,Datum, Start, Ziel, Free places, Price, Status and description.
+     *
+     *
+     */
+
+
+    public Fahrt getFahrtForViewDrive(int fahrtId){
+
+        Fahrt fahrtToBeViewed = null;
+
+        Fahrt.Builder builder = new Fahrt.Builder();
+
+        try{
+
+            PreparedStatement preparedStatementForViewedFahrt = connection.
+                    prepareStatement("SELECT anbieter, fahrtdatumzeit, startort, zielort, maxPlaetze" +
+                            ", fahrtkosten, status, beschreibung" +
+                            " FROM dbp097.fahrt " +
+                            "WHERE fid = ?");
+
+            ResultSet resultSetRetrievedFahrtToBeViewed = preparedStatementForViewedFahrt.executeQuery();
+
+            /*
+             * What we will retrieve for now is only:
+             * 1) StartOrt
+             * 2) ZielOrt
+             * 3) FahrtKosten
+             * 5) Status
+             * 6) beschreibung
+             *
+             * Now what is remaining is:
+             * 1) Number of remaining seats:
+             *  We have to retrieve the maximum number of seats, save it then:
+             *  Do a group by and sum all of bewertungen for this specific fahrt and then subtract it.
+             *
+             * 2) Bewertungen:
+             *
+             * We have to join three tables,
+             */
+
+            while(resultSetRetrievedFahrtToBeViewed.next()){
+
+                fahrtToBeViewed = new Fahrt.Builder()
+                        .startOrt(resultSetRetrievedFahrtToBeViewed.getString("startort"))
+                        .zielOrt(resultSetRetrievedFahrtToBeViewed.getString("zielort"))
+                        .fahrtKosten(resultSetRetrievedFahrtToBeViewed.getDouble("fahrtkosten"))
+                        .status(resultSetRetrievedFahrtToBeViewed.getString("status"))
+                        .beschreibung(resultSetRetrievedFahrtToBeViewed.getString("beschreibung"))
+                        .build();
+
+
+
+            }
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return fahrtToBeViewed;
 
     }
 
