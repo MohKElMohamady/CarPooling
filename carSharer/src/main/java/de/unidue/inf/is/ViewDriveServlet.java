@@ -1,5 +1,7 @@
 package de.unidue.inf.is;
 
+import de.unidue.inf.is.stores.FahrtStore;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +22,10 @@ public class ViewDriveServlet extends HttpServlet {
          * Hardcoding the fahrt id until I receive it from Ibrahim.
          */
 
+        FahrtStore fahrtStore = new FahrtStore();
+
         int fahrtId = 1;
+
 
 
 
