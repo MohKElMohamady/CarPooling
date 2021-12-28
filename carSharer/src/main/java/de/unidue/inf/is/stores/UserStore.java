@@ -23,7 +23,13 @@ public final class UserStore implements Closeable {
 
     private Connection connection;
     private boolean complete;
+    private static int CurrentUserIdInSession;
 
+    public static int getCurrentUserIdInSession()
+    {
+        return CurrentUserIdInSession;
+
+    }
 
     public UserStore() throws StoreException {
         try {
@@ -109,20 +115,33 @@ public final class UserStore implements Closeable {
 
     }
 
+
+    //I know for sure that this method is going to run. I will just use this method to also fetch the id of the user and store it in a static variable here.
+    //and because its static. it will be shared by all the instances of the UserStore.
     public String getNameUser(String email) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("select name from dbp097.benutzer where email = ?");
         preparedStatement.setString(1, email);
         ResultSet resultSet = preparedStatement.executeQuery();
+
+        PreparedStatement preparedStatement2 = connection.prepareStatement("select bid from dbp097.benutzer where email = ?");
+        preparedStatement2.setString(1, email);
+        ResultSet resultSet2 = preparedStatement2.executeQuery();
+
+
         String nameUser = null;
         while (resultSet.next()) {
             nameUser=resultSet.getString("name");
         }
+
+        //If the current User Id comes up as 0, something has gone wrong in the query. lets test out if we get the current user id or no
+        int Userid=0;
+        while (resultSet2.next()) {
+            Userid = resultSet2.getInt("bid");
+        }
+
+        CurrentUserIdInSession= Userid;
         return nameUser;
-        
     }
-
-
-
 
     public void addUser(User userToAdd) throws StoreException {
         try {

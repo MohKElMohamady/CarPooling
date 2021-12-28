@@ -61,6 +61,7 @@ public final class DBUtil {
             input = new FileInputStream("settings.properties");
 
             // Zugangsdaten aus der Properties-Datei lesen
+
             properties.load(input);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -77,6 +78,7 @@ public final class DBUtil {
         Connection connection = DriverManager.getConnection(url, user, pass);
         return connection;
     }
+
 
 
     public static boolean checkDatabaseExistsExternal() {

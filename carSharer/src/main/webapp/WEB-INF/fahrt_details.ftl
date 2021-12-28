@@ -78,7 +78,7 @@
                 </h3>
                 <#list trip as trip>
                 <form method="post" action="/reserve_servlet?fid=${trip.getFahrtId()}">
-                    Anzahl Plaetze fuer Reservierung: <input type="number" value="Anz" name="anzahlPlaetze" />
+                    Anzahl Plaetze fuer Reservierung: <input type="number" value="Anz" name="anzahlPlaetze" min="1" max="2" />
                     <input type="submit" value="Fahr reservieren" name="reserve button" />
                 </form>
                 </#list>

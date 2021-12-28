@@ -64,7 +64,28 @@ public class FahrtStore implements Closeable {
         }
     }
 
-    //now lets implement the methods needed for the Fahrt table.
+
+
+    public int getNumberFreePlaces(int fid){
+        int numberFreePlaces=0;
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select freiplaetze from dbp097.anzfreiplaetze where fid= ?");
+
+            preparedStatement.setInt(1, fid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while(resultSet.next()){
+                numberFreePlaces= resultSet.getInt("freiplaetze");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return numberFreePlaces;
+    }
+
 
     //this method will give all the open trips/Fahrten
     public List<Fahrt> getOpenTrips(){
@@ -99,6 +120,32 @@ public class FahrtStore implements Closeable {
         openTripsList.stream().forEach(System.out::println);
         System.out.println("#########################################################");
         return openTripsList;
+    }
+
+    public boolean isTripOpen(int fid){
+        boolean isOpen=true;
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select status from dbp097.fahrt where dbp097.fahrt.fid= ?");
+
+            preparedStatement.setInt(1, fid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while(resultSet.next()){
+                String status= resultSet.getString("status");
+                if (status.equals("offen")){
+                    isOpen= true;
+                }
+                else{
+                    isOpen= false;
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return isOpen;
+
     }
 
     //the below method will get all the information for a particular trip with the ID that gets passed to it!
