@@ -50,7 +50,7 @@
         </p>
 
         <form name="enterUsername" action="/view_main_servlet" method="post">
-            <input type="text" class="enterUsernameForm" name="email" >
+            <input type="text" class="enterUsernameForm" name="email">
             <input  type="submit" value="submit">
         </form>
 
