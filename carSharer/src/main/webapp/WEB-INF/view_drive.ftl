@@ -46,48 +46,16 @@
 
     <div id="site">
         <p>
-            Enter the following details!
+            Information
         </p>
 
-        <form name="searchFahrt" action="/view_search" method="post">
-            <label for="startId">Start:</label>
-            <input id="startId" type="text" name="start">
-            <br>
+        <div>
 
-            <label for="zielId">Ziel:</label>
-            <input id="zielId" type="text" name="ziel">
 
-            <br>
 
-            <label for="startId" >ab: </label>
-            <input id="abId" type="date" name="abDate">
 
-            <input type="submit">
-
-            <br>
-
-        </form>
-
-        <div id="surchErgebnisse">
-            <ul>
-
-            </ul>
         </div>
 
-    </div>
-
-    <div id="searchResult">
-        <#list fahrteFromSearch as trip>
-            <div>
-                Insert picture here
-                <br>
-                Von: ${trip.getStartOrt()}
-                Nach: ${trip.getZielOrt()}
-            </div>
-        </#list>
-    </div>
-
-    <div>
 
     </div>
 

@@ -233,6 +233,83 @@ public class FahrtStore implements Closeable {
         return  fahrteSearchResult;
     }
 
+    /*
+     * Section for view drive
+     */
+
+    /*
+     * What needs to be achieved here?
+     * 1) retrieve objects of type Fahrt/Drive
+     * 2) Be able to reserve or delete the trips
+     * 3) Be able to create to see all the ratings for this specific drive.
+     */
+
+    /*
+     * This method should retrieve for us:
+     * 1) The information for the drive/trip from the first section of the page including the attributes:
+     *      Anbieter, Fahrt ,Datum, Start, Ziel, Free places, Price, Status and description.
+     *
+     *
+     */
+
+
+    public Fahrt getFahrtForViewDrive(int fahrtId){
+
+        Fahrt fahrtToBeViewed = null;
+
+        Fahrt.Builder builder = new Fahrt.Builder();
+
+        try{
+
+            PreparedStatement preparedStatementForViewedFahrt = connection.
+                    prepareStatement("SELECT anbieter, fahrtdatumzeit, startort, zielort, maxPlaetze" +
+                            ", fahrtkosten, status, beschreibung" +
+                            " FROM dbp097.fahrt " +
+                            "WHERE fid = ?");
+
+            ResultSet resultSetRetrievedFahrtToBeViewed = preparedStatementForViewedFahrt.executeQuery();
+
+            /*
+             * What we will retrieve for now is only:
+             * 1) StartOrt
+             * 2) ZielOrt
+             * 3) FahrtKosten
+             * 5) Status
+             * 6) beschreibung
+             *
+             * Now what is remaining is:
+             * 1) Number of remaining seats:
+             *  We have to retrieve the maximum number of seats, save it then:
+             *  Do a group by and sum all of bewertungen for this specific fahrt and then subtract it.
+             *
+             * 2) Bewertungen:
+             *
+             * We have to join three tables,
+             */
+
+            while(resultSetRetrievedFahrtToBeViewed.next()){
+
+                fahrtToBeViewed = new Fahrt.Builder()
+                        .startOrt(resultSetRetrievedFahrtToBeViewed.getString("startort"))
+                        .zielOrt(resultSetRetrievedFahrtToBeViewed.getString("zielort"))
+                        .fahrtKosten(resultSetRetrievedFahrtToBeViewed.getDouble("fahrtkosten"))
+                        .status(resultSetRetrievedFahrtToBeViewed.getString("status"))
+                        .beschreibung(resultSetRetrievedFahrtToBeViewed.getString("beschreibung"))
+                        .build();
+
+
+
+            }
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return fahrtToBeViewed;
+
+    }
+
 
 }
 

@@ -16,5 +16,13 @@ public class ViewDriveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        /*
+         * Hardcoding the fahrt id until I receive it from Ibrahim.
+         */
+
+        int fahrtId = 1;
+
+
+
     }
 }
