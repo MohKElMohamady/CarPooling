@@ -6,22 +6,26 @@ import de.unidue.inf.is.domain.TimestampDB2;
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class BewertungStore extends Store{
+public class BewertungStore extends Store {
 
     /*
      * General question: After the creation of the Bewertung, we need to retrieve it back again (inefficient?)
      * because how will we insert it back again?
      */
 
-    public Bewertung insertBewertung(String textNachricht, int rating, int fahrtId, int userId){
+    public Bewertung insertBewertung(String textNachricht, int rating, int fahrtId, int userId) {
 
         /*
          * There is no need to fetch the date from the Servlet or the Html page it will be
          * created here automatically
          */
 
-        try{
+        try {
 
             /*
              * First, we have to create the Bewertung itself and persist it in the database.
@@ -50,12 +54,12 @@ public class BewertungStore extends Store{
 
             System.out.println("Rating is " + rating);
 
-            preparedStatementForInsertingBewertung.setString(1,  textNachricht);
+            preparedStatementForInsertingBewertung.setString(1, textNachricht);
             preparedStatementForInsertingBewertung.setInt(2, rating);
-             /*
-              * Unsure what method to use on the prepared statement to insert the date? How would it be possible to fit
-              * the DB2 data in the preparedStatement.
-              */
+            /*
+             * Unsure what method to use on the prepared statement to insert the date? How would it be possible to fit
+             * the DB2 data in the preparedStatement.
+             */
             preparedStatementForInsertingBewertung.setString(3, currentTimeStamp.toString());
 
             int i = preparedStatementForInsertingBewertung.executeUpdate();
@@ -91,7 +95,7 @@ public class BewertungStore extends Store{
 
             int bewertungId = 0;
 
-            while(resultSetBewertungId.next()){
+            while (resultSetBewertungId.next()) {
 
                 bewertungId = resultSetBewertungId.getInt("beid");
 
@@ -105,15 +109,15 @@ public class BewertungStore extends Store{
             PreparedStatement preparedStatementForInsertingSchreiben =
                     connection.prepareStatement("INSERT INTO dbp097.schreiben (benutzer, fahrt, bewertung) VALUES (?, ?, ?)");
 
-            preparedStatementForInsertingSchreiben.setInt(1,userId);
-            preparedStatementForInsertingSchreiben.setInt(2,fahrtId);
-            preparedStatementForInsertingSchreiben.setInt(3,bewertungId);
+            preparedStatementForInsertingSchreiben.setInt(1, userId);
+            preparedStatementForInsertingSchreiben.setInt(2, fahrtId);
+            preparedStatementForInsertingSchreiben.setInt(3, bewertungId);
 
             preparedStatementForInsertingSchreiben.executeUpdate();
 
             connection.commit();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -143,6 +147,81 @@ public class BewertungStore extends Store{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+    }
+
+
+    /*
+     * This section of the code is for implementing the the third last section of view drive.
+     * What needs to be achieved?
+     * First we have to retrieve all of the Bewertungen from the schreiben table so that we can retrieve the information
+     * for it.
+     * Second, we also have to retrieve the email of the person who wrote the Bewertungen.
+     * Third, we have to calculate the average bewertung
+     */
+
+
+    public Map<String, Bewertung> retreiveAllBewerterAndTheirBewertungen(int fahrtId) {
+        /*
+         * We have to join the benutzer table, the bewertung table to retrieve all the suitable information on the
+         * schreiben table.
+         */
+
+        Map<String, Bewertung> mapListOfUserAndHisRating = new HashMap<>();
+
+        List<Integer> totalBewertungForATrip = new ArrayList<>();
+
+
+        /*
+         * Create the prepared statement with the Joins.
+         * The query that we are using in this method:
+         * SELECT benutzer.email, bewertung.textnachricht, bewertung.rating
+           FROM dbp097.schreiben INNER JOIN dbp097.benutzer ON dbp097.schreiben.benutzer = dbp097.benutzer.bid
+           INNER JOIN dbp097.bewertung ON dbp097.schreiben.bewertung = dbp097.bewertung.beid
+           WHERE dbp097.schreiben.fahrt = 1
+         */
+
+        try {
+            PreparedStatement preparedStatementAllUserAndRating =
+                    connection.
+                            prepareStatement("SELECT email, textnachricht, rating" +
+                    " FROM dbp097.schreiben INNER JOIN dbp097.benutzer ON dbp097.schreiben.benutzer = dbp097.benutzer.bid " +
+                    "INNER JOIN dbp097.bewertung ON dbp097.schreiben.bewertung = dbp097.bewertung.beid" +
+                    " WHERE dbp097.schreiben.fahrt = ?"
+            );
+
+            preparedStatementAllUserAndRating.setInt(1, fahrtId);
+
+            ResultSet resultSetAllUserAndRating = preparedStatementAllUserAndRating.executeQuery();
+
+            while(resultSetAllUserAndRating.next()){
+
+                /*
+                 * Two steps to be done: We have to add each rating into the list so that we can calculate the average
+                 * Retrieve the email, create the Bewertung object and then finally pass it to the list of Maps
+                 */
+
+                int rating = resultSetAllUserAndRating.getInt("rating");
+
+                String textnachricht = resultSetAllUserAndRating.getString("textnachricht");
+
+                totalBewertungForATrip.add(rating);
+
+                Bewertung bewertung = new Bewertung.Builder().rating(rating).textNachricht(textnachricht).build();
+
+                String email = resultSetAllUserAndRating.getString("email");
+
+                mapListOfUserAndHisRating.put(email, bewertung);
+
+            }
+
+        } catch (Exception e) {
+            throw new StoreException(e);
+        }
+
+        System.out.println(mapListOfUserAndHisRating);
+
+        return mapListOfUserAndHisRating;
 
     }
 
