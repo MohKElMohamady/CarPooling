@@ -28,6 +28,7 @@ public class FahrtDetailsServlet extends HttpServlet {
 
             req.setAttribute("trip", trip);
             req.setAttribute("email", anbieter.getEmail());
+
             req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
 
         }

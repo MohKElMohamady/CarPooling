@@ -130,4 +130,20 @@ public class ReservierungStore implements Closeable {
         catch(SQLException e){
         }
     }
+
+    public void deleteReservierungWithFid(int fid){
+
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE from dbp097.reservieren where fahrt=?");
+
+            preparedStatement.setInt(1, fid);
+            preparedStatement.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
 }

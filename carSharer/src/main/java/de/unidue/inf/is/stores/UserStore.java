@@ -115,6 +115,28 @@ public final class UserStore implements Closeable {
 
     }
 
+    public String getEmailCurrentUser(){
+        String email = "";
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select email from dbp097.benutzer where bid= ?");
+
+            preparedStatement.setInt(1, CurrentUserIdInSession);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while(resultSet.next()){
+                email= resultSet.getString("email");
+
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return email;
+
+
+    }
+
 
     //I know for sure that this method is going to run. I will just use this method to also fetch the id of the user and store it in a static variable here.
     //and because its static. it will be shared by all the instances of the UserStore.
@@ -140,8 +162,13 @@ public final class UserStore implements Closeable {
         }
 
         CurrentUserIdInSession= Userid;
+
         return nameUser;
     }
+
+
+
+
 
     public void addUser(User userToAdd) throws StoreException {
         try {
