@@ -21,6 +21,7 @@ public class ViewMainServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("We RE IN THE VIEW MAIN SEVLET");
 
         String email = req.getParameter("email");
         try (UserStore userStore = new UserStore();

@@ -133,8 +133,6 @@ public final class UserStore implements Closeable {
             throwables.printStackTrace();
         }
         return email;
-
-
     }
 
 
