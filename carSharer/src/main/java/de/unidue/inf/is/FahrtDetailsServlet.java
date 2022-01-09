@@ -22,6 +22,7 @@ public class FahrtDetailsServlet extends HttpServlet {
         int fahrtId= Integer.parseInt(req.getParameter("fid"));
         try(FahrtStore fahrtStore = new FahrtStore();
             BewertungStore bewertungStore = new BewertungStore()){
+
             List<Fahrt> trip= fahrtStore.getAllInfoForTrip(fahrtId);
             User anbieter= fahrtStore.getAnbieter(fahrtId);
 
@@ -34,17 +35,27 @@ public class FahrtDetailsServlet extends HttpServlet {
                 totalBewertung.add(entry.getValue());
             }
 
-            double averageRating = totalBewertung.stream().
-                    mapToDouble(Bewertung::getRatingAsDouble)
-                    .average()
-                    .getAsDouble();
+            double averageRating=0;
+            System.out.println(totalBewertung);
+
+            try{
+                 averageRating = totalBewertung.stream().
+                        mapToDouble(Bewertung::getRatingAsDouble)
+                        .average()
+                        .getAsDouble();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
             System.out.println("The average rating is " + averageRating);
 
             req.setAttribute("trip", trip);
             req.setAttribute("email", anbieter.getEmail());
+
             req.setAttribute("emailsAndTheirRatings", mailBewertungMap);
-            req.setAttribute("avgRating",averageRating);
+//            req.setAttribute("avgRating",averageRating);
             req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
 
         }

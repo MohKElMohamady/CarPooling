@@ -34,6 +34,25 @@ public class FahrtStore implements Closeable {
         }
     }
 
+    public void deleteFahrtWithFid(int fid){
+
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE from dbp097.fahrt where fid=?");
+
+            preparedStatement.setInt(1, fid);
+            preparedStatement.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
+
+
+
+
 
     public void complete() {
         complete = true;
@@ -86,6 +105,55 @@ public class FahrtStore implements Closeable {
         return numberFreePlaces;
     }
 
+    public int getUserIDofRideMaker(int fid){
+        int userIDofRideMaker=0;
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select anbieter from dbp097.fahrt where dbp097.fahrt.fid= ?");
+
+            preparedStatement.setInt(1, fid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            while(resultSet.next()){
+                 userIDofRideMaker= resultSet.getInt("anbieter");
+
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return userIDofRideMaker;
+
+
+    }
+
+    public boolean hasUserAlreadyReserved(int fid){
+        boolean result= false;
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("select * from dbp097.reservieren where fahrt= ? AND kunde = ?" );
+
+            System.out.println("THE FID AND THE KUNDE ARE: "+ fid + ", " + UserStore.getCurrentUserIdInSession() );
+
+            preparedStatement.setInt(1, fid);
+            preparedStatement.setInt(2, UserStore.getCurrentUserIdInSession());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+            if(resultSet.next()){
+                result= true;
+            }
+            else{
+                result= false;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
+
+    }
+
 
     //this method will give all the open trips/Fahrten
     public List<Fahrt> getOpenTrips(){
@@ -107,7 +175,10 @@ public class FahrtStore implements Closeable {
 
                 //the below variable is actually storing the free places for each trip. Just reusing the MaxPlaetze Variable.
                 // Notice the columnLabel =)
-                f.setMaxPlaetze(resultSet.getInt("freiPlaetze"));
+                f.setMaxPlaetze(resultSet.getInt("freiplaetze"));
+                System.out.println("#########################################################");
+                System.out.println("THE NUMBER OF FREE PLACES IS: "+ resultSet.getInt("freiplaetze"));
+                System.out.println("#########################################################");
                 f.setFahrtKosten(resultSet.getDouble("fahrtkosten"));
                 String path= f.removePfadKeyword(resultSet.getString("icon"));
                 f.setIconPath(path);
@@ -150,6 +221,11 @@ public class FahrtStore implements Closeable {
 
     //the below method will get all the information for a particular trip with the ID that gets passed to it!
     public List<Fahrt> getAllInfoForTrip(int fid){
+
+        System.out.println("#########################################################");
+        System.out.println("THE FID IS:"+ fid);
+        System.out.println("#########################################################");
+
         List<Fahrt> fahrtWithInfo= new ArrayList<>();
         try {
             //I can directly do this since i have made a new view called "anzfreiplaetze"
@@ -159,8 +235,18 @@ public class FahrtStore implements Closeable {
             preparedStatement.setInt(1, fid);
             ResultSet resultSet = preparedStatement.executeQuery();
 
+            PreparedStatement preparedStatement2 = connection
+                    .prepareStatement("select dbp097.anzfreiplaetze.freiplaetze from dbp097.anzfreiplaetze where fid= ?");
 
-            while(resultSet.next()){
+            preparedStatement2.setInt(1, fid);
+            ResultSet resultSet2 = preparedStatement2.executeQuery();
+            int freePlaces=6969;
+
+            while(resultSet2.next()){
+                freePlaces= resultSet2.getInt("freiplaetze");
+            }
+
+            while(resultSet.next() ){
                 Fahrt f= new Fahrt();
                 f.setAnbieter(resultSet.getInt("anbieter"));
                 String DB2TimeStamp= resultSet.getString("fahrtdatumzeit");
@@ -170,7 +256,7 @@ public class FahrtStore implements Closeable {
                 f.setDate(date);
                 f.setStartOrt(resultSet.getString("startort"));
                 f.setZielOrt(resultSet.getString("zielort"));
-                //f.setMaxPlaetze(resultSet.getInt("freiplaetze"));
+                f.setMaxPlaetze(freePlaces);
                 f.setFahrtKosten(resultSet.getDouble("fahrtkosten"));
                 f.setStatus(resultSet.getString("status"));
                 String beschreibung = resultSet.getString("beschreibung");
@@ -200,7 +286,7 @@ public class FahrtStore implements Closeable {
         User anbieter= new User();
 
         try{
-            PreparedStatement preparedStatement = connection.prepareStatement("select email from dbp097.benutzer where bid= ? ");
+            PreparedStatement preparedStatement = connection.prepareStatement("select email from dbp097.benutzer where bid IN (SELECT anbieter from dbp097.fahrt where fid = ?)");
             preparedStatement.setInt(1, fid);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){

@@ -59,7 +59,7 @@
                         Fahrtdatum uhr -uhrzeit: ${trip.getDate()}        ${trip.getTime()}  <br/>
                         Von= ${trip.getStartOrt()}<br/>
                         Nach= ${trip.getZielOrt()}<br/>
-                        Anzahl freier Plätze:     <br/>
+                        Anzahl freier Plätze= ${trip.getMaxPlaetze()}    <br/>
                         Status= ${trip.getStatus()}<br/>
                         <#if trip.getBeschreibung()??>
                             Beschreibung= ${trip.getBeschreibung()}<br/>
@@ -82,9 +82,12 @@
                     <input type="submit" value="Fahr reservieren" name="reserve button" />
                 </form>
                 </#list>
-                <form>
-                    <input type="submit" value="Fahr löschen" name="delete button" />
-                </form>
+
+                <#list trip as trip>
+                    <form method="post" action="/delete_servlet?fid=${trip.getFahrtId()}">
+                        <input type="submit" value="Fahr löschen" name="delete button" />
+                    </form>
+                </#list>
 
             </div>
 

@@ -46,19 +46,22 @@
 
     <div id="site">
         <p>
-            Information
+            <#if errorCode==1 >
+                ERROR!! The amount of seats you are trying to book is more than the available seats!!
+            </#if>
+            <#if errorCode==2 >
+                ERROR!! You have already reserved. You cannot reserve again!!
+            </#if>
+            <#if errorCode==3 >
+                ERROR!! You cannot delete this RIDE, YOU ARE NOT THE CREATOR. SUS!!
+            </#if>
+
+
         </p>
-
-        <div>
-
-
-
-
-        </div>
-
-
+        <form method="post" name="error_form" action="/fahrt_details_servlet?fid=${fid}">
+            <input type="submit" value="Back to previous page">
+        </form>
     </div>
-
 </div>
 </body>
 </html>

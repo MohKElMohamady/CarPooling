@@ -124,9 +124,31 @@ public class BewertungStore extends Store {
         Bewertung bewertung = new Bewertung();
 
         return bewertung;
-
     }
 
+    public void deleteBewertungWithFid(int fid){
+
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("DELETE from dbp097.schreiben where fahrt=?");
+
+            preparedStatement.setInt(1, fid);
+            preparedStatement.executeUpdate();
+            connection.commit();
+
+
+            PreparedStatement preparedStatement2 = connection
+                    .prepareStatement("DELETE from dbp097.bewertung where beid NOT IN (SELECT bewertung FROM dbp097.schreiben)");
+
+            preparedStatement2.executeUpdate();
+            connection.commit();
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
 
 
     /*

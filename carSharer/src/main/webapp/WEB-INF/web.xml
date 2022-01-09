@@ -116,7 +116,7 @@
 
 	<servlet-mapping>
 		<servlet-name>new_rating_servlet</servlet-name>
-		<url-pattern>new_rating</url-pattern>
+		<url-pattern>/new_rating</url-pattern>
 	</servlet-mapping>
 
 
@@ -139,9 +139,19 @@
 
 	<servlet-mapping>
 		<servlet-name>view_drive_servlet</servlet-name>
-		<url-pattern>view_drive</url-pattern>
+		<url-pattern>/view_drive</url-pattern>
 	</servlet-mapping>
 
+
+	<servlet>
+		<servlet-name>delete_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.DeleteServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>delete_servlet</servlet-name>
+		<url-pattern>/delete_servlet</url-pattern>
+	</servlet-mapping>
 
 
 	<!-- Prevent the visiting of MVC Views from outside the servlet container. 
