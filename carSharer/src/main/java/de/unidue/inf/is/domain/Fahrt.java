@@ -157,6 +157,7 @@ public class Fahrt {
     public static class Builder{
 
         private int maxPlaetze;
+        private int fahrtId;
         private double fahrtKosten;
         private String startOrt;
         private String zielOrt;
@@ -208,6 +209,11 @@ public class Fahrt {
 
         public Builder pfad(String val){
             pfad = val;
+            return this;
+        }
+
+        public Builder fahrtId(int val){
+            fahrtId = val;
             return this;
         }
 
