@@ -88,7 +88,7 @@
         </div>
 
         <br/><br/><br/>
-        <form method="get" name="view_main_form_third" action="/">
+        <form method="get" name="view_main_form_third" action="/new_drive">
             <input type="submit" value="Fahrt">
         </form>
     </div>

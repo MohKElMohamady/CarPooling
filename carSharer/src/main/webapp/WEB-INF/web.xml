@@ -142,6 +142,16 @@
 		<url-pattern>/view_drive</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>create_drive_servlet</servlet-name>
+		<servlet-class>de.unidue.inf.is.NewTripServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>create_drive_servlet</servlet-name>
+		<url-pattern>/new_drive</url-pattern>
+	</servlet-mapping>
+
 
 	<servlet>
 		<servlet-name>delete_servlet</servlet-name>

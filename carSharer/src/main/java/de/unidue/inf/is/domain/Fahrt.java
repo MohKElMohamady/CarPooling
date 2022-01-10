@@ -44,6 +44,9 @@ public class Fahrt {
         this.fahrtKosten = builder.fahrtKosten;
         this.status = builder.status;
         this.beschreibung = builder.beschreibung;
+        this.fahrtId = builder.fahrtId;
+        this.time = builder.time;
+        this.maxPlaetze = builder.maxPlaetze;
 
     }
 

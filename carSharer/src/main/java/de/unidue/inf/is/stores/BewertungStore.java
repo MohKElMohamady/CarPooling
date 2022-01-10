@@ -373,8 +373,13 @@ public class BewertungStore extends Store {
 
             while(resultSetOfAllOpenDrives.next()){
 
+                int tripId = resultSetOfAllOpenDrives.getInt("fid");
+
+                System.out.println("Fetching the id of each open trip");
+                System.out.println(tripId);
+
                 Fahrt fahrt = new Fahrt.Builder()
-                        .fahrtId(resultSetOfAllOpenDrives.getInt("fid"))
+                        .fahrtId(tripId)
                         .startOrt(resultSetOfAllOpenDrives.getString("startort"))
                         .zielOrt(resultSetOfAllOpenDrives.getString("zielort"))
                         .build();
