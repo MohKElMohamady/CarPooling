@@ -42,9 +42,6 @@ public class DeleteServlet extends HttpServlet {
             if(!(userIDofRideMaker ==UserStore.getCurrentUserIdInSession())){
                 req.setAttribute("errorCode", 3);
                 req.setAttribute("fid", fid);
-
-
-
                 req.getRequestDispatcher("/errorPage.ftl").forward(req, resp);
             }
 

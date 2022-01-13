@@ -79,16 +79,48 @@
                 <#list trip as trip>
                 <form method="post" action="/reserve_servlet?fid=${trip.getFahrtId()}">
                     Anzahl Plaetze fuer Reservierung: <input type="number" value="Anz" name="anzahlPlaetze" min="1" max="2" />
-                    <input type="submit" value="Fahr reservieren" name="reserve button" />
+                    <br>
+                    <input type="submit" value="Fahrt reservieren" name="reserve button" />
                 </form>
                 </#list>
 
                 <#list trip as trip>
                     <form method="post" action="/delete_servlet?fid=${trip.getFahrtId()}">
-                        <input type="submit" value="Fahr löschen" name="delete button" />
+                        <input type="submit" value="Fahrt löschen" name="delete button" />
                     </form>
                 </#list>
 
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <hr/>
+            <div>
+                <h3>
+                    Bewertung<br>
+                    Durchschnittsrating: ${avgRating}
+
+                </h3>
+                <#list emailsAndTheirRatings as mbr>
+
+                    <div>   ${mbr.getEmail()}<br>
+                            ${mbr.getBeschreibung()}<br>
+                            ${mbr.getRating()}<br>
+                            <hr>
+                    </div>
+                    /new_rating
+                </#list>
+
+                <#list trip as trip>
+                <form method="post" action="/new_rating?fid=${trip.getFahrtId()}">
+                    <input type="submit" value="Fahrt bewerten" name="Fahrt_bewerten" />
+                </form>
+                </#list>
+
+<#--                    <form method="post" action="/delete_servlet?fid=${trip.getFahrtId()}">-->
+<#--                        <input type="submit" value="Fahrt löschen" name="delete button" />-->
+<#--                    </form>-->
             </div>
 
         </div>

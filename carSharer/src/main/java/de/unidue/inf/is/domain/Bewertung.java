@@ -56,4 +56,27 @@ public class Bewertung {
 
     }
 
+    public int getRatingId() {
+        return ratingId;
+    }
+
+    public void setRatingId(int ratingId) {
+        this.ratingId = ratingId;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getTextNachricht() {
+        return textNachricht;
+    }
+
+    public void setTextNachricht(String textNachricht) {
+        this.textNachricht = textNachricht;
+    }
 }

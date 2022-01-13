@@ -208,12 +208,13 @@ public class BewertungStore extends Store {
 
                 totalBewertungForATrip.add(rating);
 
-                /*Bewertung bewertung = new Bewertung.Builder().rating(rating).textNachricht(textnachricht).build();*/
+                Bewertung bewertung = new Bewertung.Builder().rating(rating).textNachricht(textnachricht).build();
+//                Bewertung bewertung = new Bewertung();
+//                bewertung.setRating(rating);
+//                bewertung.setTextNachricht(textnachricht);
 
                 String email = resultSetAllUserAndRating.getString("email");
-
-                mapListOfUserAndHisRating.put(email, new Bewertung());
-
+                mapListOfUserAndHisRating.put(email, bewertung);
             }
 
         } catch (Exception e) {

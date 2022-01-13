@@ -47,10 +47,10 @@
     <div id="site">
         <p>
             <#if errorCode==1 >
-                ERROR!! The amount of seats you are trying to book is more than the available seats!!
+                ERROR!! The amount of seats you are trying to book is more than the maximum allowed seats!!
             </#if>
             <#if errorCode==2 >
-                ERROR!! You have already reserved. You cannot reserve again!!
+                ERROR!! You are trying to enter a date in the past. Please go back and enter a date in the present!!
             </#if>
             <#if errorCode==3 >
                 ERROR!! You cannot delete this RIDE, YOU ARE NOT THE CREATOR. SUS!!
@@ -61,8 +61,8 @@
 
 
         </p>
-        <form method="post" name="error_form" action="/fahrt_details_servlet?fid=${fid}">
-            <input type="submit" value="Back to previous page">
+        <form method="get" name="view_main_form_third" action="/new_drive">
+            <input type="submit" value="Fahrt">
         </form>
     </div>
 </div>

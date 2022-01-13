@@ -1,6 +1,7 @@
 package de.unidue.inf.is;
 
 import de.unidue.inf.is.domain.Bewertung;
+import de.unidue.inf.is.domain.EmailBeschreibungRating;
 import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.stores.BewertungStore;
@@ -49,13 +50,27 @@ public class FahrtDetailsServlet extends HttpServlet {
             }
 
 
+            List<EmailBeschreibungRating> mailBewertungList= new ArrayList<>();
+            for (Map.Entry<String, Bewertung> entry : mailBewertungMap.entrySet()){
+                EmailBeschreibungRating obj= new EmailBeschreibungRating();
+                obj.setBeschreibung(entry.getValue().getTextNachricht());
+                obj.setEmail(entry.getKey());
+                obj.setRating(entry.getValue().getRating());
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println(obj);
+                mailBewertungList.add(obj);
+            }
+
+
+
+
             System.out.println("The average rating is " + averageRating);
 
             req.setAttribute("trip", trip);
-            req.setAttribute("email", anbieter.getEmail());
 
-            req.setAttribute("emailsAndTheirRatings", mailBewertungMap);
-//            req.setAttribute("avgRating",averageRating);
+            req.setAttribute("email", anbieter.getEmail());
+            req.setAttribute("avgRating",averageRating);
+            req.setAttribute("emailsAndTheirRatings", mailBewertungList);
             req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
 
         }

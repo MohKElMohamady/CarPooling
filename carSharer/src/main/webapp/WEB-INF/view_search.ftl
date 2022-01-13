@@ -51,16 +51,16 @@
 
         <form name="searchFahrt" action="/view_search" method="post">
             <label for="startId">Start:</label>
-            <input id="startId" type="text" name="start">
+            <input required id="startId" type="text" name="start">
             <br>
 
             <label for="zielId">Ziel:</label>
-            <input id="zielId" type="text" name="ziel">
+            <input required id="zielId" type="text" name="ziel">
 
             <br>
 
-            <label for="startId" >ab: </label>
-            <input id="abId" type="date" name="abDate">
+            <label for="abdate" >ab: </label>
+            <input required id="abId" type="date" name="abDate">
 
             <input type="submit">
 
@@ -77,6 +77,9 @@
     </div>
 
     <div id="searchResult">
+        <#if isEmpty==true >
+            sorry no results found!
+        <#else>
             <#list fahrteFromSearch as trip>
                 <div>
                     Insert picture here
@@ -85,6 +88,7 @@
                     Nach: ${trip.getZielOrt()}
                 </div>
             </#list>
+        </#if>
     </div>
 
     <div>

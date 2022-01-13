@@ -3,14 +3,17 @@ package de.unidue.inf.is;
 import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.domain.TimestampDB2;
 import de.unidue.inf.is.stores.FahrtStore;
+import de.unidue.inf.is.stores.UserStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class NewTripServlet extends HttpServlet {
 
@@ -87,32 +90,44 @@ public class NewTripServlet extends HttpServlet {
 
         if(maximumCapacity > 10){
 
-            errorMessage = 4;
-            req.getRequestDispatcher("/error.ftl");
+            req.setAttribute("errorCode", 1);
+            req.getRequestDispatcher("/errorPageFahrtErstellen.ftl").forward(req, resp);
         }
 
         try{
 
-            Date convertedDateFromHtml = TimestampDB2.htmlDateToJavaDate(date);
-
-            System.out.println(convertedDateFromHtml);
-
-            TimestampDB2.isDateinPast(date);
-
-            TimestampDB2.htmlTimeToJavaTime(time);
-
-
-
-
+            String dateAndTimeCombined= date+"-"+time+":00";
+            System.out.println("the date and time combined from the html page is : "+ dateAndTimeCombined);
+            if (TimestampDB2.isDateinPast(dateAndTimeCombined)){
+                req.setAttribute("errorCode", 2);
+                req.getRequestDispatcher("/errorPageFahrtErstellen.ftl").forward(req, resp);
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
 
-//        Fahrt newTrip = fahrtStore.createNewTrip(tripToBeCreated, transportmittel);
+        Fahrt newTrip = fahrtStore.createNewTrip(tripToBeCreated, transportmittel);
 
 //        System.out.println("The newly created trip is " + newTrip);
 
-        req.getRequestDispatcher("/new_drive.ftl").forward(req, resp);
+        try (UserStore userStore = new UserStore())
+        {
+            String email= userStore.getEmailCurrentUser();
+            System.out.println("THE EMAIL OF THE CURRENT USER IS: "+ email);
+            String nameUser = userStore.getNameUser(email);
+            System.out.println("THE NAME OF THE CURRENT USER IS: "+ nameUser);
+            List<Fahrt> reservedTrips = userStore.getTrips(email);
+            //cchecking here if the data arrives in java or no!
+            List<Fahrt> openTrips = fahrtStore.getOpenTrips();
 
+            //now we need to send this entire list to a ftl page.
+            req.setAttribute("nameUser", nameUser);
+            req.setAttribute("reservedTrips", reservedTrips);
+            req.setAttribute("openTrips", openTrips);
+
+            req.getRequestDispatcher("/view_main.ftl").forward(req, resp);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

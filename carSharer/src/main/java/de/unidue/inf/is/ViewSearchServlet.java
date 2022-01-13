@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /*
  * To Do:
@@ -22,11 +23,14 @@ import java.util.List;
 public class ViewSearchServlet extends HttpServlet {
 
     FahrtStore fahrtStore = new FahrtStore();
+    //we set isEmpty to true because we are arriving at the page for the first time and there are no searfh results
+    boolean isEmpty= true;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
+        req.setAttribute("isEmpty",isEmpty);
         req.getRequestDispatcher("/view_search.ftl").forward(req, resp);
 
     }
@@ -37,8 +41,12 @@ public class ViewSearchServlet extends HttpServlet {
         List<Fahrt> fahrteFromSearch;
 
         String start = req.getParameter("start");
+//        start=start.toLowerCase();
+//        start=start.substring(0,1).toUpperCase()+start.substring(1);
 
         String ziel = req.getParameter("ziel");
+//        ziel=ziel.toLowerCase();
+//        ziel=ziel.substring(0,1).toUpperCase()+ziel.substring(1);
 
         /*
          * In this step we have fetched first the date from the request AND THEN changed the format of the date from
@@ -64,6 +72,7 @@ public class ViewSearchServlet extends HttpServlet {
 
         if(!fahrteFromSearch.isEmpty()){
             req.setAttribute("fahrteFromSearch", fahrteFromSearch);
+            req.setAttribute("isEmpty",false);
         }else{
             req.setAttribute("isEmpty",true);
         }
