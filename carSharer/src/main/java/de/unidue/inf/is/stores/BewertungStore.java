@@ -1,6 +1,7 @@
 package de.unidue.inf.is.stores;
 
 import de.unidue.inf.is.domain.Bewertung;
+import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.domain.TimestampDB2;
 
 import java.io.Closeable;
@@ -207,11 +208,11 @@ public class BewertungStore extends Store {
 
                 totalBewertungForATrip.add(rating);
 
-                Bewertung bewertung = new Bewertung.Builder().rating(rating).textNachricht(textnachricht).build();
+                /*Bewertung bewertung = new Bewertung.Builder().rating(rating).textNachricht(textnachricht).build();*/
 
                 String email = resultSetAllUserAndRating.getString("email");
 
-                mapListOfUserAndHisRating.put(email, bewertung);
+                mapListOfUserAndHisRating.put(email, new Bewertung());
 
             }
 
@@ -223,6 +224,175 @@ public class BewertungStore extends Store {
 
         return mapListOfUserAndHisRating;
 
+    }
+
+    /* Methods for the bonus page */
+
+    public Map<String, Integer> getCreatorIdAndRatingWithHighestAvgRating(){
+
+        /*
+         * What we will be done here is the following:
+         * A hashmap will be created that will have two entries:
+         * A key called userId having the value of Anbieter's Id with the highest rating
+         * A key called avgRating having the value of the average id
+         */
+
+        Map<String, Integer> mapContainingIdAndAvgRating = new HashMap<>();
+
+        int highestAvgRating = 0;
+        int driverWithHighestAvgRating =0;
+
+        /*
+         *  Now we will create a query that fetches the id of the user and his highest average rating by calculating
+         * the average and then sort it in descending order and finally fetch the row that has the highest average rating
+             SELECT anbieter, AVG(rating) AS avg_rating
+             FROM bewertung
+             INNER JOIN schreiben ON bewertung.beid = schreiben.bewertung
+             INNER JOIN fahrt ON fahrt.fid = schreiben.fahrt
+             GROUP BY anbieter
+             ORDER BY avg_rating DESC
+             FETCH FIRST 1 ROWS ONLY
+         */
+
+
+
+        try{
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT anbieter, AVG(rating) AS avg_rating FROM dbp097.bewertung " +
+                            "INNER JOIN dbp097.schreiben ON dbp097.bewertung.beid = dbp097.schreiben.bewertung "+
+                            "INNER JOIN dbp097.fahrt ON dbp097.fahrt.fid = dbp097.schreiben.fahrt " +
+                            "GROUP BY anbieter ORDER BY avg_rating DESC FETCH FIRST 1 ROWS ONLY");
+
+            /*
+             * Now it is time to fetch the result set i.e the id of the driver and his average rating
+             */
+
+
+            ResultSet resultSetHighestRatedDriver = preparedStatement.executeQuery();
+
+            System.out.println("Finding out if the result set has any values or not");
+
+            while(resultSetHighestRatedDriver.next()){
+
+                System.out.println("Fetching the id of the highest driver");
+                driverWithHighestAvgRating = resultSetHighestRatedDriver.getInt("anbieter");
+                System.out.println(driverWithHighestAvgRating);
+
+
+                System.out.println("Fetching the highest average rating");
+                highestAvgRating = resultSetHighestRatedDriver.getInt("avg_rating");
+                System.out.println(highestAvgRating);
+
+
+
+            }
+
+            /*
+             * Now after capturing the id of the driver and his highest rating, we need to set these values in the
+             * map
+             */
+
+            mapContainingIdAndAvgRating.put("HighestAverageRating", highestAvgRating);
+            mapContainingIdAndAvgRating.put("DriverId",driverWithHighestAvgRating);
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return mapContainingIdAndAvgRating;
+    }
+
+
+    /*
+     * Now we need a method that retrieves the email of best driver by providing the id
+     */
+
+
+    public String getEmailOfDriverWithHighestRating(int driverId){
+
+        String emailOfDriverWithHighestRating = "";
+
+
+        try{
+
+            PreparedStatement preparedStatementForEmailOfHighestRatedDriver = connection
+                    .prepareStatement("SELECT email FROM dbp097.benutzer WHERE bid = ?");
+
+            preparedStatementForEmailOfHighestRatedDriver.setInt(1,driverId);
+
+            ResultSet resultSetToGetEmail = preparedStatementForEmailOfHighestRatedDriver.executeQuery();
+
+            while(resultSetToGetEmail.next()){
+
+                System.out.println("Fetching the email of the highest rated driver");
+
+                emailOfDriverWithHighestRating = resultSetToGetEmail.getString("email");
+
+                System.out.println(emailOfDriverWithHighestRating);
+            }
+
+        }catch(Exception e){
+                e.printStackTrace();
+        }
+
+        return emailOfDriverWithHighestRating;
+
+    }
+
+
+
+
+    /*
+     * the second method needed to retrieve all the drives of the driver with the highest rating and they must be open
+     */
+
+
+    public List<Fahrt> getAllOpenDrivesOfHighestRatedDriver(int driverId){
+
+        List<Fahrt> listOfOpenTripsCreatedByHighestRatedDriver = new ArrayList<>();
+
+        try{
+
+            /*
+             *
+             SELECT fid, startort, zielort
+                    FROM dbp097.fahrt
+                    WHERE anbieter = 1 AND status = 'offen'
+             */
+            PreparedStatement preparedStatementListOfAllDrives = connection.prepareStatement("SELECT fid, startort, zielort " +
+                    "FROM dbp097.fahrt " +
+                    "WHERE anbieter = ? AND status = 'offen'");
+
+            preparedStatementListOfAllDrives.setInt(1, driverId);
+
+            ResultSet resultSetOfAllOpenDrives = preparedStatementListOfAllDrives.executeQuery();
+
+            while(resultSetOfAllOpenDrives.next()){
+
+                int tripId = resultSetOfAllOpenDrives.getInt("fid");
+
+                System.out.println("Fetching the id of each open trip");
+                System.out.println(tripId);
+
+                Fahrt fahrt = new Fahrt.Builder()
+                        .fahrtId(tripId)
+                        .startOrt(resultSetOfAllOpenDrives.getString("startort"))
+                        .zielOrt(resultSetOfAllOpenDrives.getString("zielort"))
+                        .build();
+
+                listOfOpenTripsCreatedByHighestRatedDriver.add(fahrt);
+
+            }
+
+        }catch(Exception e){
+
+        }
+
+        return listOfOpenTripsCreatedByHighestRatedDriver;
     }
 
 }

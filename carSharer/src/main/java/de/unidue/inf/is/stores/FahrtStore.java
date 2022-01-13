@@ -444,5 +444,63 @@ public class FahrtStore implements Closeable {
     }
 
 
+
+    /* Methods specific to the creating a new Trip for the page new_drive and servlet NewTripServlet */
+
+    public Fahrt createNewTrip(Fahrt fahrt, int transportmittel){
+
+        try{
+
+            System.out.println("Starting inserting a new trip");
+
+            PreparedStatement preparedStatementForViewedFahrt = connection.
+                    prepareStatement("INSERT INTO " +
+                            "dbp097.fahrt (startort, zielort, fahrtdatumzeit, maxPlaetze, fahrtkosten, anbieter, transportmittel, beschreibung)" +
+                            "VALUES (?, ?, ?, ?, ?, ? ,?, ?)");
+
+            System.out.println("The anbieter is " + UserStore.getCurrentUserIdInSession());
+
+            System.out.println("The starting point of the trip is " + fahrt.getStartOrt());
+            preparedStatementForViewedFahrt.setString(1,fahrt.getStartOrt());
+
+            System.out.println("The destination of the trip is " + fahrt.getZielOrt());
+            preparedStatementForViewedFahrt.setString(2,fahrt.getZielOrt());
+
+            System.out.println("The Timestamp of the trip is " + fahrt.getTime());
+            preparedStatementForViewedFahrt.setString(3,fahrt.getTime());
+
+            System.out.println("The maximum places of the trip is " + fahrt.getMaxPlaetze());
+            preparedStatementForViewedFahrt.setInt(4,fahrt.getMaxPlaetze());
+
+            System.out.println("The cost of the trip is " + fahrt.getFahrtKosten());
+            preparedStatementForViewedFahrt.setDouble(5,fahrt.getFahrtKosten());
+
+
+            /*preparedStatementForViewedFahrt.setString(6,fahrt.getStatus());*/
+
+
+            preparedStatementForViewedFahrt.setInt(6,UserStore.getCurrentUserIdInSession());
+
+
+            preparedStatementForViewedFahrt.setInt(7,transportmittel);
+
+
+            preparedStatementForViewedFahrt.setString(8,fahrt.getBeschreibung());
+
+            preparedStatementForViewedFahrt.executeUpdate();
+
+            connection.commit();
+
+            System.out.println("Insertion complete!");
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return fahrt;
+    }
+
 }
 

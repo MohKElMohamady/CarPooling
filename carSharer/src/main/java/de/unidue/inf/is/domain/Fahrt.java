@@ -44,6 +44,9 @@ public class Fahrt {
         this.fahrtKosten = builder.fahrtKosten;
         this.status = builder.status;
         this.beschreibung = builder.beschreibung;
+        this.fahrtId = builder.fahrtId;
+        this.time = builder.time;
+        this.maxPlaetze = builder.maxPlaetze;
 
     }
 
@@ -157,6 +160,7 @@ public class Fahrt {
     public static class Builder{
 
         private int maxPlaetze;
+        private int fahrtId;
         private double fahrtKosten;
         private String startOrt;
         private String zielOrt;
@@ -208,6 +212,11 @@ public class Fahrt {
 
         public Builder pfad(String val){
             pfad = val;
+            return this;
+        }
+
+        public Builder fahrtId(int val){
+            fahrtId = val;
             return this;
         }
 
