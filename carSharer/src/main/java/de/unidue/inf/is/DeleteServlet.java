@@ -29,11 +29,22 @@ public class DeleteServlet extends HttpServlet {
             ReservierungStore rs= new ReservierungStore();
             UserStore us= new UserStore()) {
 
+            String errorMessage = "";
+
+            /*
+             * We are starting with the process of validating the deletion
+             *
+             * First step below is checking if the person who is trying to delete the trip is the actual
+             * owner i.e the anbieter
+             */
 
             int userIDofRideMaker = fahrtStore.getUserIDofRideMaker(fid);
             if(!(userIDofRideMaker ==UserStore.getCurrentUserIdInSession())){
                 req.setAttribute("errorCode", 3);
                 req.setAttribute("fid", fid);
+
+
+
                 req.getRequestDispatcher("/errorPage.ftl").forward(req, resp);
             }
 

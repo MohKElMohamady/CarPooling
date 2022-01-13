@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class NewTripServlet extends HttpServlet {
 
@@ -23,6 +25,8 @@ public class NewTripServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        int errorMessage = 0;
 
         final String start = req.getParameter("start");
         System.out.println("The starting point of the trip is " + start);
@@ -67,7 +71,7 @@ public class NewTripServlet extends HttpServlet {
 
         System.out.println("The date coming from the html form is " + time);
 
-        final String db2ReadyTimeStamp = TimestampDB2.HtmlTimestampToDB2TimeStamp(date, time);
+        final String db2ReadyTimeStamp = TimestampDB2.htmlTimestampToDB2TimeStamp(date, time);
 
         System.out.println("The following timestamp will be directly passed to the store to save it : " + db2ReadyTimeStamp);
 
@@ -81,9 +85,32 @@ public class NewTripServlet extends HttpServlet {
                 .beschreibung(description)
                 .build();
 
-        Fahrt newTrip = fahrtStore.createNewTrip(tripToBeCreated, transportmittel);
+        if(maximumCapacity > 10){
 
-        System.out.println("The newly created trip is " + newTrip);
+            errorMessage = 4;
+            req.getRequestDispatcher("/error.ftl");
+        }
+
+        try{
+
+            Date convertedDateFromHtml = TimestampDB2.htmlDateToJavaDate(date);
+
+            System.out.println(convertedDateFromHtml);
+
+            TimestampDB2.isDateinPast(date);
+
+            TimestampDB2.htmlTimeToJavaTime(time);
+
+
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+//        Fahrt newTrip = fahrtStore.createNewTrip(tripToBeCreated, transportmittel);
+
+//        System.out.println("The newly created trip is " + newTrip);
 
         req.getRequestDispatcher("/new_drive.ftl").forward(req, resp);
 

@@ -494,6 +494,7 @@ public class FahrtStore implements Closeable {
             System.out.println("Insertion complete!");
 
 
+
         }catch (Exception e){
             e.printStackTrace();
         }

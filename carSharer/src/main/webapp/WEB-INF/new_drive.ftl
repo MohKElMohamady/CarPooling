@@ -53,7 +53,7 @@
             <br>
             <label for=maxCapacity>Maximale Kapazitaet:</label> <input class="maxCapacity" name="maxCapacity" type="number" required max="10">
             <br>
-            <label for="tripCost">Fahrtkosten</label> <input name="tripCost" type="number" required min="1">
+            <label for="tripCost">Fahrtkosten</label> <input name="tripCost" pattern=" 0+\.[0-9]*[1-9][0-9]*$" type="number" required min="1">
             <br>
             <div>
                 <label>Transportmittel:</label>
@@ -69,7 +69,7 @@
 
             <label>Beschreibung: </label>
             <br>
-            <textarea name="description" cols="25" rows="2">
+            <textarea name="description" cols="25" rows="5" maxlength="50">
                 Enter the description here!
             </textarea>
 
