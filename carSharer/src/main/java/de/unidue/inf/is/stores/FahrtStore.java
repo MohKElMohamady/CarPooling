@@ -1,5 +1,7 @@
 package de.unidue.inf.is.stores;
 
+import de.unidue.inf.is.domain.Bewertung;
+import de.unidue.inf.is.domain.EmailBeschreibungRating;
 import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.utils.DBUtil;
@@ -9,7 +11,13 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import de.unidue.inf.is.utils.DateTimeUtil;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /*
@@ -50,6 +58,59 @@ public class FahrtStore implements Closeable {
 
     }
 
+    public static void returnToFahrtDetailsPage(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+
+        int fahrtId = Integer.parseInt(req.getParameter("fid"));
+        try (FahrtStore fahrtStore = new FahrtStore();
+             BewertungStore bewertungStore = new BewertungStore()) {
+
+            List<Fahrt> trip = fahrtStore.getAllInfoForTrip(fahrtId);
+            User anbieter = fahrtStore.getAnbieter(fahrtId);
+
+            Map<String, Bewertung> mailBewertungMap =
+                    bewertungStore.retreiveAllBewerterAndTheirBewertungen(fahrtId);
+
+            List<Bewertung> totalBewertung = new ArrayList<>();
+
+            for (Map.Entry<String, Bewertung> entry : mailBewertungMap.entrySet()) {
+                totalBewertung.add(entry.getValue());
+            }
+
+            double averageRating = 0;
+            System.out.println(totalBewertung);
+
+            try {
+                averageRating = totalBewertung.stream().
+                        mapToDouble(Bewertung::getRatingAsDouble)
+                        .average()
+                        .getAsDouble();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            List<EmailBeschreibungRating> mailBewertungList = new ArrayList<>();
+            for (Map.Entry<String, Bewertung> entry : mailBewertungMap.entrySet()) {
+                EmailBeschreibungRating obj = new EmailBeschreibungRating();
+                obj.setBeschreibung(entry.getValue().getTextNachricht());
+                obj.setEmail(entry.getKey());
+                obj.setRating(entry.getValue().getRating());
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println(obj);
+                mailBewertungList.add(obj);
+            }
+
+
+            System.out.println("The average rating is " + averageRating);
+
+            req.setAttribute("trip", trip);
+            req.setAttribute("email", anbieter.getEmail());
+            req.setAttribute("avgRating", averageRating);
+            req.setAttribute("emailsAndTheirRatings", mailBewertungList);
+            req.getRequestDispatcher("/fahrt_details.ftl").forward(req, res);
+        }
+    }
 
 
 
@@ -321,13 +382,13 @@ public class FahrtStore implements Closeable {
 
         try {
             PreparedStatement preparedStatementForSearchResult = connection.
-                    prepareStatement("SELECT startort, zielort, fahrtkosten, transportmittel " +
-                            "FROM dbp097.fahrt " +
-                            "WHERE startort = ? AND zielort =? AND fahrtdatumzeit >= ? AND status = 'offen'");
+                    prepareStatement("SELECT fid, startort, zielort, fahrtkosten, transportmittel , icon " +
+                            "FROM dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel=dbp097.transportmittel.tid " +
+                            "WHERE startort LIKE ? AND zielort LIKE ? AND fahrtdatumzeit >= ? AND status = 'offen'");
 
-            preparedStatementForSearchResult.setString(1, start);
+            preparedStatementForSearchResult.setString(1, "%"+start+"%");
 
-            preparedStatementForSearchResult.setString(2,ziel);
+            preparedStatementForSearchResult.setString(2,"%"+ziel+"%");
 
             preparedStatementForSearchResult.setString(3, timestamp);
 
@@ -350,9 +411,13 @@ public class FahrtStore implements Closeable {
                         .startOrt(resultSetFoundFahrten.getString("startort"))
                         .zielOrt(resultSetFoundFahrten.getString("zielort"))
                         .fahrtKosten(resultSetFoundFahrten.getInt("fahrtkosten"))
+                        .transportmittel(resultSetFoundFahrten.getInt("transportmittel"))
                         .build();
 
                 System.out.println(fahrt);
+                String path= fahrt.removePfadKeyword(resultSetFoundFahrten.getString("icon"));
+                fahrt.setIconPath(path);
+                fahrt.setFahrtId(resultSetFoundFahrten.getInt("fid"));
 
                 fahrteSearchResult.add(fahrt);
 

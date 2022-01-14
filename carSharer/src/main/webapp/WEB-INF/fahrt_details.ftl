@@ -104,12 +104,12 @@
                 </h3>
                 <#list emailsAndTheirRatings as mbr>
 
-                    <div>   ${mbr.getEmail()}<br>
-                            ${mbr.getBeschreibung()}<br>
-                            ${mbr.getRating()}<br>
+                    <div>   Email: ${mbr.getEmail()}<br>
+                            Beschreibung: ${mbr.getBeschreibung()}<br>
+                            Rating: ${mbr.getRating()}<br>
                             <hr>
                     </div>
-                    /new_rating
+
                 </#list>
 
                 <#list trip as trip>
@@ -117,6 +117,12 @@
                     <input type="submit" value="Fahrt bewerten" name="Fahrt_bewerten" />
                 </form>
                 </#list>
+                <br>
+                <br>
+
+                <form method="get" action="/returnToMainPage">
+                    <input type="submit" value="return to main page" />
+                </form>
 
 <#--                    <form method="post" action="/delete_servlet?fid=${trip.getFahrtId()}">-->
 <#--                        <input type="submit" value="Fahrt löschen" name="delete button" />-->

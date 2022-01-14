@@ -42,7 +42,8 @@ public class ReserveServlet extends HttpServlet {
                 User anbieter= fahrtStore.getAnbieter(fid);
                 req.setAttribute("trip", trip);
                 req.setAttribute("email", anbieter.getEmail());
-                req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
+//                req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
+                FahrtStore.returnToFahrtDetailsPage(req,resp);
 
             }
 

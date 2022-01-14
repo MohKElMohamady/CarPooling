@@ -75,6 +75,8 @@
         </div>
 
     </div>
+    <h3>Suchergebnisse</h3><br>
+    <hr>
 
     <div id="searchResult">
         <#if isEmpty==true >
@@ -82,10 +84,14 @@
         <#else>
             <#list fahrteFromSearch as trip>
                 <div>
-                    Insert picture here
+                    <form method="post" name="view_main_form_second" action="/fahrt_details_servlet?fid=${trip.getFahrtId()}">
+                    <input type="image" src=${trip.getIconPath()} alt="picture"  class="icon"/><br/>
                     <br>
                     Von: ${trip.getStartOrt()} <br>
                     Nach: ${trip.getZielOrt()} <br>
+                    </form>
+                    <hr>
+
                 </div>
             </#list>
         </#if>

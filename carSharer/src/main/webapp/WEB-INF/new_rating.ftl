@@ -81,12 +81,14 @@
                 <label for="bewertungsValueId">5</label>
                 <input id="bewertungValueId" name="bewertungAddedByUser" type="radio" id="rating" value="5" >
 
-
-
             </div>
 
             <input type="submit">
 
+        </form>
+
+        <form method="get" action="/returnToMainPage">
+            <input type="submit" value="return to main page" />
         </form>
 
     </div>

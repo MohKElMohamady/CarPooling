@@ -19,7 +19,7 @@ public class FahrtDetailsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        System.out.println(req.getParameter("fid"));
+
         int fahrtId= Integer.parseInt(req.getParameter("fid"));
         try(FahrtStore fahrtStore = new FahrtStore();
             BewertungStore bewertungStore = new BewertungStore()){
@@ -39,16 +39,18 @@ public class FahrtDetailsServlet extends HttpServlet {
             double averageRating=0;
             System.out.println(totalBewertung);
 
-            try{
-                 averageRating = totalBewertung.stream().
-                        mapToDouble(Bewertung::getRatingAsDouble)
-                        .average()
-                        .getAsDouble();
+            if(totalBewertung.size()>0){
+                try {
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                    averageRating = totalBewertung.stream().
+                            mapToDouble(Bewertung::getRatingAsDouble)
+                            .average()
+                            .getAsDouble();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
 
             List<EmailBeschreibungRating> mailBewertungList= new ArrayList<>();
             for (Map.Entry<String, Bewertung> entry : mailBewertungMap.entrySet()){
@@ -62,12 +64,9 @@ public class FahrtDetailsServlet extends HttpServlet {
             }
 
 
-
-
             System.out.println("The average rating is " + averageRating);
 
             req.setAttribute("trip", trip);
-
             req.setAttribute("email", anbieter.getEmail());
             req.setAttribute("avgRating",averageRating);
             req.setAttribute("emailsAndTheirRatings", mailBewertungList);

@@ -14,6 +14,9 @@ import de.unidue.inf.is.domain.Reservieren;
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.utils.DBUtil;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 public final class UserStore implements Closeable {
@@ -29,6 +32,29 @@ public final class UserStore implements Closeable {
     {
         return CurrentUserIdInSession;
 
+    }
+
+    public static void returnToMainPage(HttpServletRequest req, HttpServletResponse res){
+        try (UserStore userStore = new UserStore();
+             FahrtStore fahrtStore= new FahrtStore())
+        {
+            String email= userStore.getEmailCurrentUser();
+            System.out.println("THE EMAIL OF THE CURRENT USER IS: "+ email);
+            String nameUser = userStore.getNameUser(email);
+            System.out.println("THE NAME OF THE CURRENT USER IS: "+ nameUser);
+            List<Fahrt> reservedTrips = userStore.getTrips(email);
+            //cchecking here if the data arrives in java or no!
+            List<Fahrt> openTrips = fahrtStore.getOpenTrips();
+
+            //now we need to send this entire list to a ftl page.
+            req.setAttribute("nameUser", nameUser);
+            req.setAttribute("reservedTrips", reservedTrips);
+            req.setAttribute("openTrips", openTrips);
+
+            req.getRequestDispatcher("/view_main.ftl").forward(req, res);
+        } catch (SQLException | IOException | ServletException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public UserStore() throws StoreException {

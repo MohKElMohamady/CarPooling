@@ -59,6 +59,12 @@
             Nach: ${OpenTrip.getZielOrt()}
             <br>
         </#list>
+
+        <br>
+        <br>
+        <form method="get" action="/returnToMainPage">
+            <input type="submit" value="return to main page" />
+        </form>
     </div>
     <br/>
 </div>

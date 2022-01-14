@@ -47,7 +47,10 @@
     <div id="site">
         <h1>
             Car Sharer <br>
-            <h2>Hello ${nameUser}</h2>
+            <h2>Hello ${nameUser}</h2><br>
+            <form method="get" name="view_main_form_fifth" action="/hello">
+                <input type="submit" value="signout">
+            </form>
         </h1>
         <h3>
             Meine reservierten Fahrten:
@@ -90,7 +93,17 @@
 
         <br/><br/><br/>
         <form method="get" name="view_main_form_third" action="/new_drive">
-            <input type="submit" value="Fahrt">
+            <input type="submit" value="Fahrt erstellen">
+        </form>
+
+        <br/><br/>
+
+        <form method="get" name="view_main_form_fourth" action="/view_search">
+            <input type="submit" value="Search For Fahrten">
+        </form>
+        <br/><br/>
+        <form method="post" name="view_main_form_fifth" action="/bonus">
+            <input type="submit" value="Bonus Page">
         </form>
     </div>
 

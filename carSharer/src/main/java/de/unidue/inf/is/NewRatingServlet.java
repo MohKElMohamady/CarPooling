@@ -17,6 +17,7 @@ public class NewRatingServlet extends HttpServlet {
 
     BewertungStore bewertungStore = new BewertungStore();
     int fid=0;
+    int count =0;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,23 +30,37 @@ public class NewRatingServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req,resp);
 
+        if (count ==0)
+        {
+            doGet(req,resp);
+            count++;
+        }
 
+        else{
 
-        /* Because the FahrtId was not passed into the query string, it will be hardwired into the code
-         *
-         */
+            count =0;
+            int userId = UserStore.getCurrentUserIdInSession();
 
-        int userId = UserStore.getCurrentUserIdInSession();
+            String bewertungsText = req.getParameter("bewertungsText");
 
-        String bewertungsText = req.getParameter("bewertungsText");
+            int rating = Integer.parseInt(req.getParameter("bewertungAddedByUser"));
 
-        int rating = Integer.parseInt(req.getParameter("bewertungAddedByUser"));
+            try
+            {
+                bewertungStore.insertBewertung(bewertungsText, rating, fid, userId);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+                req.setAttribute("errorCode", 3);
+                req.setAttribute("fid", fid);
+                req.getRequestDispatcher("/errorPage.ftl").forward(req, resp);
 
-        bewertungStore.insertBewertung(bewertungsText,rating, fid, userId);
+            }
 
-        req.getRequestDispatcher("/new_rating.ftl").forward(req, resp);
+            req.getRequestDispatcher("/new_rating.ftl").forward(req, resp);
+        }
+
 
     }
 }

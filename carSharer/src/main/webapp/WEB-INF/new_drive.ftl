@@ -78,6 +78,11 @@
 
         </form>
 
+
+        <form method="get" action="/returnToMainPage">
+            <input type="submit" value="return to main page" />
+        </form>
+
     </div>
 
 
