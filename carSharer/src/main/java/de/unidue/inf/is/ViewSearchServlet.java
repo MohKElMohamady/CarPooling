@@ -4,6 +4,7 @@ package de.unidue.inf.is;
 import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.stores.FahrtStore;
 import de.unidue.inf.is.utils.DateTimeUtil;
+import de.unidue.inf.is.utils.StringUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,12 +42,12 @@ public class ViewSearchServlet extends HttpServlet {
         List<Fahrt> fahrteFromSearch;
 
         String start = req.getParameter("start");
-//        start=start.toLowerCase();
-//        start=start.substring(0,1).toUpperCase()+start.substring(1);
+        start= StringUtil.transformString(start);
 
         String ziel = req.getParameter("ziel");
-//        ziel=ziel.toLowerCase();
-//        ziel=ziel.substring(0,1).toUpperCase()+ziel.substring(1);
+        ziel= StringUtil.transformString(ziel);
+
+
 
         /*
          * In this step we have fetched first the date from the request AND THEN changed the format of the date from

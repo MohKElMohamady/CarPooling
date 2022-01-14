@@ -84,8 +84,8 @@
                 <div>
                     Insert picture here
                     <br>
-                    Von: ${trip.getStartOrt()}
-                    Nach: ${trip.getZielOrt()}
+                    Von: ${trip.getStartOrt()} <br>
+                    Nach: ${trip.getZielOrt()} <br>
                 </div>
             </#list>
         </#if>

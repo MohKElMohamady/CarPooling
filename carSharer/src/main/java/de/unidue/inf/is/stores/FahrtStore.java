@@ -321,7 +321,7 @@ public class FahrtStore implements Closeable {
 
         try {
             PreparedStatement preparedStatementForSearchResult = connection.
-                    prepareStatement("SELECT startort, zielort, fahrtkosten " +
+                    prepareStatement("SELECT startort, zielort, fahrtkosten, transportmittel " +
                             "FROM dbp097.fahrt " +
                             "WHERE startort = ? AND zielort =? AND fahrtdatumzeit >= ? AND status = 'offen'");
 
@@ -344,6 +344,7 @@ public class FahrtStore implements Closeable {
                 System.out.println(resultSetFoundFahrten.getString("startort"));
                 System.out.println(resultSetFoundFahrten.getString("zielort"));
                 System.out.println(resultSetFoundFahrten.getInt("fahrtkosten"));
+
 
                 Fahrt fahrt = new Fahrt.Builder()
                         .startOrt(resultSetFoundFahrten.getString("startort"))

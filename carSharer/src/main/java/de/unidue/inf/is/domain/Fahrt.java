@@ -47,7 +47,7 @@ public class Fahrt {
         this.fahrtId = builder.fahrtId;
         this.time = builder.time;
         this.maxPlaetze = builder.maxPlaetze;
-
+        this.transportMittelId=builder.transportmittel;
     }
 
 
@@ -168,9 +168,15 @@ public class Fahrt {
         private String beschreibung;
         private String status;
         private String pfad;
+        private int transportmittel;
 
         public Builder(){
 
+        }
+
+        public Builder transportmittel(int val){
+            transportmittel = val;
+            return this;
         }
 
         public Builder startOrt(String val){
