@@ -20,7 +20,7 @@ public class BonusServlet extends HttpServlet {
 
 
     /*
-     * Notice: Although the bonus servlet fetches data from multiple data i.e
+     * Notice: Although the bonus servlet fetches data from multiple table i.e
      * 1) the highest rating from bewertung table
      * 2) the email from the benutzer id
      * 3) the list of trips from the fahrt table

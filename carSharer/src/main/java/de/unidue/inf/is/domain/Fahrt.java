@@ -25,6 +25,7 @@ public class Fahrt {
     private int anbieter;
     //adding an additional attribute to the fahrt since it needs the transport icon a lot!
     private String iconPath;
+    private int rating;
 
 
     public Fahrt(double fahrtKosten, String startOrt, String zielOrt, String iconPath) {
@@ -48,6 +49,15 @@ public class Fahrt {
         this.time = builder.time;
         this.maxPlaetze = builder.maxPlaetze;
         this.transportMittelId=builder.transportmittel;
+        this.iconPath= builder.pfad;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
 

@@ -52,12 +52,17 @@
 
     <div>
         <#list ListOfOpenTrips as OpenTrip>
+            <input type="image" src=${OpenTrip.getIconPath()} alt="picture"  class="icon"/><br/>
             Fahrt-ID: ${OpenTrip.getFahrtId()}
             <br>
             Von: ${OpenTrip.getStartOrt()}
             <br>
             Nach: ${OpenTrip.getZielOrt()}
             <br>
+            Rating: ${OpenTrip.getRating()}
+            <br>
+
+
         </#list>
 
         <br>

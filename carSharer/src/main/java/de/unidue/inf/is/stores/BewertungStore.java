@@ -3,6 +3,7 @@ package de.unidue.inf.is.stores;
 import de.unidue.inf.is.domain.Bewertung;
 import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.domain.TimestampDB2;
+import org.apache.commons.lang.ObjectUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -172,7 +173,7 @@ public class BewertungStore extends Store {
         return bewertung;
     }
 
-    public void deleteBewertungWithFid(int fid){
+    public void deleteBewertungAndSchreibenWithFid(int fid){
 
         try{
             PreparedStatement preparedStatement = connection
@@ -409,9 +410,10 @@ public class BewertungStore extends Store {
                     FROM dbp097.fahrt
                     WHERE anbieter = 1 AND status = 'offen'
              */
-            PreparedStatement preparedStatementListOfAllDrives = connection.prepareStatement("SELECT fid, startort, zielort " +
-                    "FROM dbp097.fahrt " +
-                    "WHERE anbieter = ? AND status = 'offen' ");
+            PreparedStatement preparedStatementListOfAllDrives = connection.prepareStatement("SELECT fid, startort, zielort, icon, rating " +
+                    "FROM dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel= dbp097.transportmittel.tid " +
+                    "LEFT OUTER JOIN dbp097.schreiben ON dbp097.fahrt.fid= dbp097.schreiben.fahrt " +
+                    "LEFT OUTER JOIN dbp097.bewertung ON dbp097.bewertung.beid=dbp097.schreiben.bewertung WHERE anbieter = ? AND status = 'offen' ORDER BY rating asc ");
 
             preparedStatementListOfAllDrives.setInt(1, driverId);
 
@@ -430,6 +432,12 @@ public class BewertungStore extends Store {
                         .zielOrt(resultSetOfAllOpenDrives.getString("zielort"))
                         .build();
 
+                //adding the icon!
+                String path= fahrt.removePfadKeyword(resultSetOfAllOpenDrives.getString("icon"));
+                fahrt.setIconPath(path);
+                fahrt.setRating(resultSetOfAllOpenDrives.getInt("rating"));
+
+
                 listOfOpenTripsCreatedByHighestRatedDriver.add(fahrt);
 
             }
@@ -440,5 +448,7 @@ public class BewertungStore extends Store {
 
         return listOfOpenTripsCreatedByHighestRatedDriver;
     }
+
+
 
 }

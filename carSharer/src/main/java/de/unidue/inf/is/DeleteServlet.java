@@ -48,7 +48,7 @@ public class DeleteServlet extends HttpServlet {
             //will enter the else if the creator is trying to delete!
             else{
 //                delete all the bewertungen related to this trip!
-                bs.deleteBewertungWithFid(fid);
+                bs.deleteBewertungAndSchreibenWithFid(fid);
                 rs.deleteReservierungWithFid(fid);
                 fahrtStore.deleteFahrtWithFid(fid);
                 //and now the page redirect to the main page or something
