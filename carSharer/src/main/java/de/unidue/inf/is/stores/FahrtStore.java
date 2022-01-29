@@ -291,7 +291,7 @@ public class FahrtStore implements Closeable {
         try {
             //I can directly do this since i have made a new view called "anzfreiplaetze"
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("select * from dbp097.fahrt where dbp097.fahrt.fid= ?");
+                    .prepareStatement("select * from dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel= dbp097.transportmittel.tid where dbp097.fahrt.fid= ?");
 
             preparedStatement.setInt(1, fid);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -301,7 +301,7 @@ public class FahrtStore implements Closeable {
 
             preparedStatement2.setInt(1, fid);
             ResultSet resultSet2 = preparedStatement2.executeQuery();
-            int freePlaces=6969;
+            int freePlaces=0;
 
             while(resultSet2.next()){
                 freePlaces= resultSet2.getInt("freiplaetze");
@@ -309,6 +309,8 @@ public class FahrtStore implements Closeable {
 
             while(resultSet.next() ){
                 Fahrt f= new Fahrt();
+                String path= f.removePfadKeyword(resultSet.getString("icon"));
+                f.setIconPath(path);
                 f.setAnbieter(resultSet.getInt("anbieter"));
                 String DB2TimeStamp= resultSet.getString("fahrtdatumzeit");
                 String time= DateTimeUtil.extractTimeFromDB2DateTimeString(DB2TimeStamp);

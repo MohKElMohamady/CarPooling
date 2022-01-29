@@ -119,7 +119,7 @@ public final class UserStore implements Closeable {
                     fahrt.setFahrtId(resultSet3.getInt("fid"));
                     fahrt.setStartOrt(resultSet3.getString("startort"));
                     fahrt.setZielOrt(resultSet3.getString("zielort"));
-                    fahrt.setStatus(resultSet3.getString("status"));;
+                    fahrt.setStatus(resultSet3.getString("status"));
                     String path= fahrt.removePfadKeyword(resultSet3.getString("icon"));
                     fahrt.setIconPath(path);
                     fahrtList.add(fahrt);

@@ -53,9 +53,7 @@
         <form name="enterRating" action="new_rating" method="post">
             <label for="bewertungsTextId">Bewertungstext:</label>
             <br>
-            <textarea id="bewertungsTextId" class="bewertungsTextClass" name="bewertungsText" cols="10" rows="20">
-                Enter the description here!
-            </textarea>
+            <textarea id="bewertungsTextId" class="bewertungsTextClass" name="bewertungsText" cols="10" rows="20" required></textarea>
 
             <br>
 

@@ -54,6 +54,7 @@
             <#list trip as trip>
                 <form method="post" name="view_main_form" action="/fahrt_details_servlet?fid=${trip.getFahrtId()}">
                     <div>
+                        <img src=${trip.getIconPath()} alt="picture" class="icon"/><br/>
 
                         Anbieter= ${email} <br/>
                         Fahrtdatum uhr -uhrzeit= ${trip.getDate()}        ${trip.getTime()}  <br/>
