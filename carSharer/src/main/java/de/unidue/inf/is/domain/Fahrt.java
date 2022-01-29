@@ -61,6 +61,7 @@ public class Fahrt {
     }
 
 
+
     public String getTime() {
         return time;
     }

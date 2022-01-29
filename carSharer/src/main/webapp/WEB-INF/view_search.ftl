@@ -89,6 +89,8 @@
                     <br>
                     Von: ${trip.getStartOrt()} <br>
                     Nach: ${trip.getZielOrt()} <br>
+                        Preis: ${trip.getFahrtKosten()} <br>
+
                     </form>
                     <hr>
 

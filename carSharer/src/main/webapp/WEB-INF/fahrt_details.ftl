@@ -55,17 +55,18 @@
                 <form method="post" name="view_main_form" action="/fahrt_details_servlet?fid=${trip.getFahrtId()}">
                     <div>
 
-                        Anbieter: ${email} <br/>
-                        Fahrtdatum uhr -uhrzeit: ${trip.getDate()}        ${trip.getTime()}  <br/>
+                        Anbieter= ${email} <br/>
+                        Fahrtdatum uhr -uhrzeit= ${trip.getDate()}        ${trip.getTime()}  <br/>
                         Von= ${trip.getStartOrt()}<br/>
                         Nach= ${trip.getZielOrt()}<br/>
                         Anzahl freier Plätze= ${trip.getMaxPlaetze()}    <br/>
+                        Preis = $${trip.getFahrtKosten()}  <br/>
                         Status= ${trip.getStatus()}<br/>
                         <#if trip.getBeschreibung()??>
                             Beschreibung= ${trip.getBeschreibung()}<br/>
                         </#if>
                     </div>
-                    <input type="submit" value="view">
+
                 </form>
             </#list>
             <br/>

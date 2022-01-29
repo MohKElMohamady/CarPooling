@@ -85,7 +85,7 @@ public final class UserStore implements Closeable {
                 System.out.println("#########################################################");
             }
 
-            System.out.println("the id of the fetcched user: "+ ID);
+            System.out.println("the id of the fetched user: "+ ID);
 
             //Now get the reservations of the user with the above ID
             PreparedStatement preparedStatement2 = connection.prepareStatement("select * from dbp097.reservieren where kunde = ?");

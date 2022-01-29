@@ -55,8 +55,8 @@
             <#if errorCode==3 >
                 ERROR!! You cannot delete this RIDE, YOU ARE NOT THE CREATOR. SUS!!
             </#if>
-            <#if errorCode==3 >
-                ERROR!! You Cannot book
+            <#if errorCode==4 >
+                ERROR!! You Cannot book since you are the creator of the Fahrt!
             </#if>
 
 

@@ -413,7 +413,7 @@ public class BewertungStore extends Store {
             PreparedStatement preparedStatementListOfAllDrives = connection.prepareStatement("SELECT fid, startort, zielort, icon, rating " +
                     "FROM dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel= dbp097.transportmittel.tid " +
                     "LEFT OUTER JOIN dbp097.schreiben ON dbp097.fahrt.fid= dbp097.schreiben.fahrt " +
-                    "LEFT OUTER JOIN dbp097.bewertung ON dbp097.bewertung.beid=dbp097.schreiben.bewertung WHERE anbieter = ? AND status = 'offen' ORDER BY rating asc ");
+                    "LEFT OUTER JOIN dbp097.bewertung ON dbp097.bewertung.beid=dbp097.schreiben.bewertung WHERE anbieter = ? AND status = 'offen' ORDER BY rating desc ");
 
             preparedStatementListOfAllDrives.setInt(1, driverId);
 

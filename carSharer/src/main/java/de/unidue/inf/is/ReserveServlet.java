@@ -4,6 +4,7 @@ import de.unidue.inf.is.domain.Fahrt;
 import de.unidue.inf.is.domain.User;
 import de.unidue.inf.is.stores.FahrtStore;
 import de.unidue.inf.is.stores.ReservierungStore;
+import de.unidue.inf.is.stores.UserStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +26,7 @@ public class ReserveServlet extends HttpServlet {
         try (ReservierungStore reservierungStore = new ReservierungStore();
              FahrtStore fahrtStore = new FahrtStore()) {
 
+
             if (fahrtStore.getNumberFreePlaces(fid) < anzPlaetze) {
                 req.setAttribute("errorCode", 1);
                 req.setAttribute("fid", fid);
@@ -34,8 +36,13 @@ public class ReserveServlet extends HttpServlet {
                 req.setAttribute("errorCode", 2);
                 req.setAttribute("fid", fid);
                 req.getRequestDispatcher("/errorPage.ftl").forward(req, resp);
-
             }
+            if(UserStore.getCurrentUserIdInSession()==fahrtStore.getUserIDofRideMaker(fid)){
+                req.setAttribute("errorCode", 4);
+                req.setAttribute("fid", fid);
+                req.getRequestDispatcher("/errorPage.ftl").forward(req, resp);
+            }
+
             else{
                 reservierungStore.doReservation(fid, anzPlaetze);
                 List<Fahrt> trip= fahrtStore.getAllInfoForTrip(fid);
@@ -44,7 +51,6 @@ public class ReserveServlet extends HttpServlet {
                 req.setAttribute("email", anbieter.getEmail());
 //                req.getRequestDispatcher("/fahrt_details.ftl").forward(req, resp);
                 FahrtStore.returnToFahrtDetailsPage(req,resp);
-
             }
 
         }
