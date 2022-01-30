@@ -410,10 +410,19 @@ public class BewertungStore extends Store {
                     FROM dbp097.fahrt
                     WHERE anbieter = 1 AND status = 'offen'
              */
-            PreparedStatement preparedStatementListOfAllDrives = connection.prepareStatement("SELECT fid, startort, zielort, icon, rating " +
-                    "FROM dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel= dbp097.transportmittel.tid " +
+            PreparedStatement preparedStatementListOfAllDrives = connection.prepareStatement("SELECT fid, startort, zielort, icon, " +
+                    "CASE " +
+                    "WHEN rating " +
+                    "IS NULL THEN 0 " +
+                    "WHEN rating = 1 THEN 1 " +
+                    "WHEN rating = 2 THEN 2 " +
+                    "WHEN rating = 3 THEN 3 " +
+                    "WHEN rating = 4 THEN  4 " +
+                    "WHEN rating = 5 THEN 5 " +
+                    "END as rating FROM dbp097.fahrt JOIN dbp097.transportmittel ON dbp097.fahrt.transportmittel= dbp097.transportmittel.tid " +
                     "LEFT OUTER JOIN dbp097.schreiben ON dbp097.fahrt.fid= dbp097.schreiben.fahrt " +
-                    "LEFT OUTER JOIN dbp097.bewertung ON dbp097.bewertung.beid=dbp097.schreiben.bewertung WHERE anbieter = ? AND status = 'offen' ORDER BY rating desc ");
+                    "LEFT OUTER JOIN dbp097.bewertung ON dbp097.bewertung.beid=dbp097.schreiben.bewertung " +
+                    "WHERE anbieter = ? AND status = 'offen' ORDER BY rating desc");
 
             preparedStatementListOfAllDrives.setInt(1, driverId);
 
@@ -435,7 +444,9 @@ public class BewertungStore extends Store {
                 //adding the icon!
                 String path= fahrt.removePfadKeyword(resultSetOfAllOpenDrives.getString("icon"));
                 fahrt.setIconPath(path);
-                fahrt.setRating(resultSetOfAllOpenDrives.getInt("rating"));
+
+                int rating = resultSetOfAllOpenDrives.getInt("rating");
+                fahrt.setRating(rating);
 
 
                 listOfOpenTripsCreatedByHighestRatedDriver.add(fahrt);
