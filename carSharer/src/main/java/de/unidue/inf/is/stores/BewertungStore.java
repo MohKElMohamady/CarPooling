@@ -197,6 +197,31 @@ public class BewertungStore extends Store {
 
     }
 
+    public void close() throws IOException {
+        if (connection != null) {
+            try {
+                if (complete) {
+                    connection.commit();
+                }
+                else {
+                    connection.rollback();
+                }
+            }
+            catch (SQLException e) {
+                throw new StoreException(e);
+            }
+            finally {
+                try {
+                    connection.close();
+                }
+                catch (SQLException e) {
+                    throw new StoreException(e);
+                }
+            }
+        }
+    }
+
+
 
     /*
      * This section of the code is for implementing the the third last section of view drive.
