@@ -181,13 +181,33 @@ public class BewertungStore extends Store {
 
             preparedStatement.setInt(1, fid);
             preparedStatement.executeUpdate();
-            connection.commit();
 
 
             PreparedStatement preparedStatement2 = connection
                     .prepareStatement("DELETE from dbp097.bewertung where beid NOT IN (SELECT bewertung FROM dbp097.schreiben)");
 
             preparedStatement2.executeUpdate();
+
+            PreparedStatement preparedStatement3 = connection
+                    .prepareStatement("DELETE from dbp097.reservieren where fahrt=?");
+
+            preparedStatement3.setInt(1, fid);
+            preparedStatement3.executeUpdate();
+
+
+                PreparedStatement preparedStatement4 = connection
+                        .prepareStatement("DELETE from dbp097.fahrt where fid=?");
+
+                preparedStatement4.setInt(1, fid);
+                preparedStatement4.executeUpdate();
+
+
+
+
+
+
+
+
             connection.commit();
 
 
